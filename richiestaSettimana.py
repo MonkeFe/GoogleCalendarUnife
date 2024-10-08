@@ -2,6 +2,8 @@ import requests
 import json
 from datetime import datetime
 
+materie = {"ISTITUZIONI DI MATEMATICA": "1", "PROGRAMMAZIONE E LABORATORIO" : "2", "ECONOMIA E GESTIONE AZIENDALE" : "3", "LINGUA INGLESE: VERIFICA DELLE CONOSCENZE" : "4"}
+
 #url = "https://aule.unife.it/AgendaStudenti/grid_call.php?view=easycourse&form-type=corso&include=corso&txtcurr=1+-+Percorso+Comune&anno=2024&corso=1233&anno2%5B%5D=PDS0%7C1&date=08-10-2024&periodo_didattico=&_lang=en&list=&week_grid_type=-1&ar_codes_=&ar_select_=&col_cells=0&empty_box=0&only_grid=0&highlighted_date=0&all_events=0&faculty_group=0&_lang=en&all_events=0&txtcurr=1+-+Percorso+Comune"
 def ottieniSettimana():
     url = "https://aule.unife.it/AgendaStudenti/grid_call.php"
@@ -54,6 +56,7 @@ def ottieniSettimana():
         event = {
             'summary': lezione['nome_insegnamento'],
             'location': lezione['aula'],
+            "colorId": materie[lezione['nome_insegnamento']],
             'start': {
                 'dateTime': start,
                 'timeZone': 'Europe/Rome',
