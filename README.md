@@ -6,3 +6,8 @@ Per il corretto funzionamento del programma bisogna:
 - inserire l'id del calendario nel file `.env` come mostrato nel file `.env.example`
 - scaricare il file `client_credentials.json` per l'accesso alle api di google
 - rinominare il file `client_credentials.json`in `credentials.json`
+
+E poi eseguire il programma con:
+  ```bash
+  python index.py
+  ```
