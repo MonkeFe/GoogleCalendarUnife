@@ -7,6 +7,11 @@ Per il corretto funzionamento del programma bisogna:
 - scaricare il file `client_credentials.json` per l'accesso alle api di google
 - rinominare il file `client_credentials.json`in `credentials.json`
 
+Installare i pacchetti con:
+```bash
+pip install -r requirements.txt
+```
+
 E poi eseguire il programma con:
   ```bash
   python index.py

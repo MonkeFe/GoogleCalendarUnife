@@ -47,8 +47,6 @@ def main():
     # Change the scope to 'https://www.googleapis.com/auth/calendar' and delete any
     # stored credentials.
     calendarioVecchio = service.events().list(calendarId= calendar_id).execute()['items']
-    with open("listaEventiCreati.json", "w") as f:
-      json.dump(calendarioVecchio, f)
 
     today = date.today()
     
