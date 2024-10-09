@@ -1,6 +1,8 @@
 import datetime
 import os.path
 from richiestaSettimana import *
+from dotenv import load_dotenv
+from datetime import date, timedelta
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -8,9 +10,11 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
+load_dotenv()
+
 # If modifying these scopes, delete the file token.json.
 SCOPES = ["https://www.googleapis.com/auth/calendar", "https://www.googleapis.com/auth/calendar.events"]
-calendar_id = "c_3f1e62d4227c8d0c52fb89f0af565b76f6c979e1ff1bf0376e10b86da8ad0f0a@group.calendar.google.com"
+calendar_id = os.getenv("CALENDAR_ID")
 
 def main():
   """Shows basic usage of the Google Calendar API.
@@ -46,9 +50,13 @@ def main():
     with open("listaEventiCreati.json", "w") as f:
       json.dump(calendarioVecchio, f)
 
+    today = date.today()
     
-    lista_eventi = ottieniSettimana()
+    lista_eventi = ottieniSettimana(today.strftime("%d-%m-%Y"))
+    lista_eventi += ottieniSettimana((today + timedelta(days=7)).strftime("%d-%m-%Y"))
+
     inseriti = []
+
     for nuovoEvento in lista_eventi:
       exist, idVecchio = confrontaEventi(nuovoEvento, calendarioVecchio)
       if exist:

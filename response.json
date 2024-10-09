@@ -1,1 +1,114 @@
-{"custom_config_limite_caratteri_titolo_celle_lezioni": 80, "custom_config_numero_caratteri_titolo_celle_lezioni": 30, "custom_config_visualizza_codice_generale_lezioni": 0, "CodiceGenerale": "51798", "informazioni_lezione": {"intestazione": "Event details", "contenuto": {"1": [{"intestazione": "Course name", "contenuto": "<a aria-label=\"ISTITUZIONI DI MATEMATICA\" href=\"index.php?view=easycourse&_lang=&include=attivita&anno=2024&attivita[]=EC589269&date=08-10-2024\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: ISTITUZIONI DI MATEMATICA\">ISTITUZIONI DI MATEMATICA</a>&nbsp;&nbsp;", "id": "nome_corso"}, {"intestazione": "", "contenuto": ""}], "3": [{"intestazione": "Professors", "contenuto": "<a aria-label=\"Tralli Giulio\" href=\"index.php?view=easycourse&_lang=&include=docente&anno=2024&docente=033562&visualizzazione_orario=cal&date=08-10-2024\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: Tralli Giulio\">Tralli Giulio</a>&nbsp;&nbsp;<br>Mail: <a href=\"mailto:giulio.tralli@unife.it\" class=\"custom_color_link\">giulio.tralli@unife.it</a><br /><a aria-label=\"Corli Andrea\" href=\"index.php?view=easycourse&_lang=&include=docente&anno=2024&docente=000327&visualizzazione_orario=cal&date=08-10-2024\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: Corli Andrea\">Corli Andrea</a>&nbsp;&nbsp;<br>Mail: <a href=\"mailto:crl@unife.it\" class=\"custom_color_link\">crl@unife.it</a>", "id": "docenti"}], "7": [{"intestazione": "Academic trail", "contenuto": "<a aria-label=\"INFORMATICA [1233] Laurea - 1 - Percorso Comune\" href=\"index.php?view=easycourse&_lang=&include=corso&anno=2024&corso=1233&anno2[]=PDS0|1&date=08-10-2024\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: INFORMATICA [1233] Laurea - 1 - Percorso Comune\">INFORMATICA [1233] Laurea - 1 - Percorso Comune</a>", "id": "curriculum"}], "9": [], "4": [{"intestazione": "Date", "contenuto": "Monday  7 October 2024<br>14:00 - 17:00", "id": "data_ora_info"}], "5": [{"intestazione": "Classroom", "contenuto": "<span style=\"font-weight:bold\">Nome aula: </span><a aria-label=\"Aula Canani\" href=\"index.php?view=rooms&include=rooms&_lang=&sede=6&aula=197&date=07-10-2024\" target=\"_blank\" title=\"Apri un'altra TAB del browser per consultare l'orario di: Aula Aula Canani\">Aula Canani</a><br><span style=\"font-weight:bold\">Capacit\u00e0: </span>153<br><span style=\"font-weight:bold\">Sede: </span><a aria-label=\"Vecchi Istituti Biologici\" href=\"index.php?view=rooms&include=rooms&_lang=&sede=6&date=07-10-2024\" target=\"_blank\" title=\"Apri un'altra TAB del browser per consultare l'orario di: Vecchi Istituti Biologici\">Vecchi Istituti Biologici</a> [via Fossato di Mortara 64/B]", "id": "aula", "label_maps": "Google maps", "label_loc_map": "View map", "label_back": "Back", "NoteAula": ""}]}}, "mostra_aula": true, "tipologia": "", "display": ["nome_insegnamento", "link_lezione_online", "docente", "aula", "orario", "tipo"], "link_lezione_online": [], "codice_insegnamento": "EC589269", "nome_insegnamento": "ISTITUZIONI DI MATEMATICA", "name_original": "ISTITUZIONI DI MATEMATICA", "Streaming": {"0": "0"}, "link_corso": "", "link_insegnamento": "", "codice_docente": "033562, 000327", "docente": "Tralli Giulio, Corli Andrea", "mail_docente": ", giulio.tralli@unife.it, , crl@unife.it", "tel_docente": ", ", "link_docente": "<a aria-label=\"Tralli Giulio\" href=\"index.php?view=easycourse&_lang=&include=docente&anno=2024&docente=033562&visualizzazione_orario=cal&date=08-10-2024\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: Tralli Giulio\">Tralli Giulio</a>&nbsp;&nbsp;<br>Mail: <a href=\"mailto:giulio.tralli@unife.it\" class=\"custom_color_link\">giulio.tralli@unife.it</a>, <a aria-label=\"Corli Andrea\" href=\"index.php?view=easycourse&_lang=&include=docente&anno=2024&docente=000327&visualizzazione_orario=cal&date=08-10-2024\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: Corli Andrea\">Corli Andrea</a>&nbsp;&nbsp;<br>Mail: <a href=\"mailto:crl@unife.it\" class=\"custom_color_link\">crl@unife.it</a>", "percorso_didattico": "INFORMATICA [1233] Laurea - 1 - Percorso Comune", "id": "1260742", "timestamp": 1728302400, "data": "07-10-2024", "GiornoCompleto": "Monday  7 October 2024", "codice_aula": "197", "codice_sede": "6", "aula": "Aula Canani [Vecchi Istituti Biologici]", "orario": "14:00 - 17:00", "tipo": "Lezione", "codice_tipo": "LEZ", "giorno": "1", "numero_giorno": "1", "nome_giorno": "Monday", "ora_inizio": "14:00", "ora_fine": "17:00", "notes": "", "maps": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2829.2437730004503!2d11.629894015719755!3d44.836968683095876!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x477e4e38ae3f855f%3A0x6b61f5935d2f8035!2sVia+Fossato+di+Mortara%2C+64%2C+44121+Ferrara+FE!5e0!3m2!1sit!2sit!4v1491226558625\" width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0\" allowfullscreen></iframe>", "loc_map": "", "coordX": "", "coordY": "", "NoteAula": "", "NoteSettimanali": "", "Annullato": "0", "insegnamento_tipo": ["Obbligatorio"], "link_aula": [""], "link_prenotazione": [], "highlighted": 0, "from_esterno": 0, "identifier_cell": 0, "vertical_idx": 0}
+{
+    "custom_config_limite_caratteri_titolo_celle_lezioni": 80,
+    "custom_config_numero_caratteri_titolo_celle_lezioni": 30,
+    "custom_config_visualizza_codice_generale_lezioni": 0,
+    "CodiceGenerale": "51798",
+    "informazioni_lezione": {
+        "intestazione": "Event details",
+        "contenuto": {
+            "1": [
+                {
+                    "intestazione": "Course name",
+                    "contenuto": "<a aria-label=\"ISTITUZIONI DI MATEMATICA\" href=\"index.php?view=easycourse&_lang=&include=attivita&anno=2024&attivita[]=EC589269&date=16-10-2024\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: ISTITUZIONI DI MATEMATICA\">ISTITUZIONI DI MATEMATICA</a>&nbsp;&nbsp;",
+                    "id": "nome_corso"
+                },
+                {
+                    "intestazione": "",
+                    "contenuto": ""
+                }
+            ],
+            "3": [
+                {
+                    "intestazione": "Professors",
+                    "contenuto": "<a aria-label=\"Tralli Giulio\" href=\"index.php?view=easycourse&_lang=&include=docente&anno=2024&docente=033562&visualizzazione_orario=cal&date=16-10-2024\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: Tralli Giulio\">Tralli Giulio</a>&nbsp;&nbsp;<br>Mail: <a href=\"mailto:giulio.tralli@unife.it\" class=\"custom_color_link\">giulio.tralli@unife.it</a><br /><a aria-label=\"Corli Andrea\" href=\"index.php?view=easycourse&_lang=&include=docente&anno=2024&docente=000327&visualizzazione_orario=cal&date=16-10-2024\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: Corli Andrea\">Corli Andrea</a>&nbsp;&nbsp;<br>Mail: <a href=\"mailto:crl@unife.it\" class=\"custom_color_link\">crl@unife.it</a>",
+                    "id": "docenti"
+                }
+            ],
+            "7": [
+                {
+                    "intestazione": "Academic trail",
+                    "contenuto": "<a aria-label=\"INFORMATICA [1233] Laurea - 1 - Percorso Comune\" href=\"index.php?view=easycourse&_lang=&include=corso&anno=2024&corso=1233&anno2[]=PDS0|1&date=16-10-2024\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: INFORMATICA [1233] Laurea - 1 - Percorso Comune\">INFORMATICA [1233] Laurea - 1 - Percorso Comune</a>",
+                    "id": "curriculum"
+                }
+            ],
+            "9": [],
+            "4": [
+                {
+                    "intestazione": "Date",
+                    "contenuto": "Monday 14 October 2024<br>14:00 - 17:00",
+                    "id": "data_ora_info"
+                }
+            ],
+            "5": [
+                {
+                    "intestazione": "Classroom",
+                    "contenuto": "<span style=\"font-weight:bold\">Nome aula: </span><a aria-label=\"Aula Canani\" href=\"index.php?view=rooms&include=rooms&_lang=&sede=6&aula=197&date=14-10-2024\" target=\"_blank\" title=\"Apri un'altra TAB del browser per consultare l'orario di: Aula Aula Canani\">Aula Canani</a><br><span style=\"font-weight:bold\">Capacit\u00e0: </span>153<br><span style=\"font-weight:bold\">Sede: </span><a aria-label=\"Vecchi Istituti Biologici\" href=\"index.php?view=rooms&include=rooms&_lang=&sede=6&date=14-10-2024\" target=\"_blank\" title=\"Apri un'altra TAB del browser per consultare l'orario di: Vecchi Istituti Biologici\">Vecchi Istituti Biologici</a> [via Fossato di Mortara 64/B]",
+                    "id": "aula",
+                    "label_maps": "Google maps",
+                    "label_loc_map": "View map",
+                    "label_back": "Back",
+                    "NoteAula": ""
+                }
+            ]
+        }
+    },
+    "mostra_aula": true,
+    "tipologia": "",
+    "display": [
+        "nome_insegnamento",
+        "link_lezione_online",
+        "docente",
+        "aula",
+        "orario",
+        "tipo"
+    ],
+    "link_lezione_online": [],
+    "codice_insegnamento": "EC589269",
+    "nome_insegnamento": "ISTITUZIONI DI MATEMATICA",
+    "name_original": "ISTITUZIONI DI MATEMATICA",
+    "Streaming": {
+        "0": "0"
+    },
+    "link_corso": "",
+    "link_insegnamento": "",
+    "codice_docente": "033562, 000327",
+    "docente": "Tralli Giulio, Corli Andrea",
+    "mail_docente": ", giulio.tralli@unife.it, , crl@unife.it",
+    "tel_docente": ", ",
+    "link_docente": "<a aria-label=\"Tralli Giulio\" href=\"index.php?view=easycourse&_lang=&include=docente&anno=2024&docente=033562&visualizzazione_orario=cal&date=16-10-2024\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: Tralli Giulio\">Tralli Giulio</a>&nbsp;&nbsp;<br>Mail: <a href=\"mailto:giulio.tralli@unife.it\" class=\"custom_color_link\">giulio.tralli@unife.it</a>, <a aria-label=\"Corli Andrea\" href=\"index.php?view=easycourse&_lang=&include=docente&anno=2024&docente=000327&visualizzazione_orario=cal&date=16-10-2024\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: Corli Andrea\">Corli Andrea</a>&nbsp;&nbsp;<br>Mail: <a href=\"mailto:crl@unife.it\" class=\"custom_color_link\">crl@unife.it</a>",
+    "percorso_didattico": "INFORMATICA [1233] Laurea - 1 - Percorso Comune",
+    "id": "1260743",
+    "timestamp": 1728907200,
+    "data": "14-10-2024",
+    "GiornoCompleto": "Monday 14 October 2024",
+    "codice_aula": "197",
+    "codice_sede": "6",
+    "aula": "Aula Canani [Vecchi Istituti Biologici]",
+    "orario": "14:00 - 17:00",
+    "tipo": "Lezione",
+    "codice_tipo": "LEZ",
+    "giorno": "1",
+    "numero_giorno": "1",
+    "nome_giorno": "Monday",
+    "ora_inizio": "14:00",
+    "ora_fine": "17:00",
+    "notes": "",
+    "maps": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2829.2437730004503!2d11.629894015719755!3d44.836968683095876!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x477e4e38ae3f855f%3A0x6b61f5935d2f8035!2sVia+Fossato+di+Mortara%2C+64%2C+44121+Ferrara+FE!5e0!3m2!1sit!2sit!4v1491226558625\" width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0\" allowfullscreen></iframe>",
+    "loc_map": "",
+    "coordX": "",
+    "coordY": "",
+    "NoteAula": "",
+    "NoteSettimanali": "",
+    "Annullato": "0",
+    "insegnamento_tipo": [
+        "Obbligatorio"
+    ],
+    "link_aula": [
+        ""
+    ],
+    "link_prenotazione": [],
+    "highlighted": 0,
+    "from_esterno": 0,
+    "identifier_cell": 0,
+    "vertical_idx": 0
+}
