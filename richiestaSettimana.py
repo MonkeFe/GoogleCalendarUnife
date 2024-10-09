@@ -68,9 +68,14 @@ def ottieniSettimana(req_date):
         events_list.append(event)
     return events_list
 
-def confrontaEventi(nuovoEvento, lista_eventi):
-    for vecchioEvento in lista_eventi:
-        if datetime.strptime(nuovoEvento['start']['dateTime'], "%Y-%m-%dT%H:%M:%S") == datetime.strptime(vecchioEvento['start']['dateTime'][:-6], "%Y-%m-%dT%H:%M:%S"):
-            return True, vecchioEvento['id']
-    return False, ''
+def insertElement(service, new_event, calendar_id):
+    event = service.events().insert(calendarId=calendar_id, body=new_event).execute()
+    print('Event created: %s' % (event.get('htmlLink')))
 
+def deleteElement(service, eventId, calendar_id):
+    service.events().delete(calendarId=calendar_id, eventId=eventId).execute()
+    print("Event deleted")
+
+def updateElement(service, eventId, body, calendar_id):
+    service.events().update(calendarId= calendar_id, eventId = eventId, body=body).execute()
+    print("Event update")

@@ -55,21 +55,31 @@ def main():
     lista_eventi = ottieniSettimana(today.strftime("%d-%m-%Y"))
     lista_eventi += ottieniSettimana((today + timedelta(days=7)).strftime("%d-%m-%Y"))
 
-    inseriti = []
+    i = 0
+    j = 0
 
-    for nuovoEvento in lista_eventi:
-      exist, idVecchio = confrontaEventi(nuovoEvento, calendarioVecchio)
-      if exist:
-        updatedEvent = service.events().update(calendarId= calendar_id, eventId = idVecchio, body=nuovoEvento).execute()
-        inseriti.append(idVecchio)
-        print('Event updated')
-      else:
-        event = service.events().insert(calendarId= calendar_id, body=nuovoEvento).execute()
-        print('Event created: %s' % (event.get('htmlLink')))
-    for x in calendarioVecchio:
-      if x["id"] not in inseriti:
-        service.events().delete(calendarId= calendar_id, eventId= x["id"]).execute()
-        print("Event deleted")
+    while (i < len(lista_eventi) or j < len(calendarioVecchio)):
+      if (i < len(lista_eventi) and j < len(calendarioVecchio)):
+        evento_lista_date = datetime.strptime(lista_eventi[i]['start']['dateTime'], "%Y-%m-%dT%H:%M:%S")
+        vecchio_evento_date = datetime.strptime(calendarioVecchio[j]['start']['dateTime'][:-6], "%Y-%m-%dT%H:%M:%S")
+
+        if (evento_lista_date == vecchio_evento_date):
+          service.events().update(calendarId= calendar_id, eventId = calendarioVecchio[j]["id"], body=lista_eventi[i]).execute()
+          i += 1
+          j += 1
+          print('Event updated')
+        elif (evento_lista_date > vecchio_evento_date):
+          deleteElement(service, calendarioVecchio[j]["id"], calendar_id)
+          j += 1
+        else:
+          insertElement(service, lista_eventi[i], calendar_id)
+          i += 1
+      elif (i < len(lista_eventi)):
+        insertElement(service, lista_eventi[i], calendar_id)
+        i += 1
+      elif (j < len(calendarioVecchio)):
+        deleteElement(service, calendarioVecchio[j]["id"], calendar_id)
+        j += 1
     
   except HttpError as error:
     print(f"An error occurred: {error}")
