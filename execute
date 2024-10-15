@@ -3,8 +3,10 @@
 # Spostati nella directory dello script
 # cd /home/midee/Documents/uni/scriptCalendario
 
-# Crea un file per verificare l'inizio dell'esecuzione
-touch inizio
+# Controlla se la cartella logs esiste e se non c'è creala
+if [ ! -d "./logs" ]; then
+  mkdir ./logs
+fi
 
 # Attiva il virtual environment
 source .venv/bin/activate

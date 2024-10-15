@@ -47,6 +47,9 @@ Installare i pacchetti del progetto con:
 ```bash
 pip install -r requirements.txt
 ```
+
+> Creare un file `.env` con dentro l'id del calendario, l'anno scolastico del primo semestre e l'anno scolastico del secondo semtre, un esempio si può trovare nel file `.env.example`
+
 ### Esecuzione
 #### Custom
 Per eseguire lo script è necessario abilitare l'ambiente virtuale:
