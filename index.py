@@ -20,6 +20,7 @@ def main():
   """Shows basic usage of the Google Calendar API.
   Prints the start and name of the next 10 events on the user's calendar.
   """
+  print(datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
   creds = None
   # The file token.json stores the user's access and refresh tokens, and is
   # created automatically when the authorization flow completes for the first
@@ -46,28 +47,42 @@ def main():
     # https://developers.google.com/calendar/quickstart/python
     # Change the scope to 'https://www.googleapis.com/auth/calendar' and delete any
     # stored credentials.
-    calendarioVecchio = service.events().list(calendarId= calendar_id).execute()['items']
 
     today = date.today()
+    iniziosettimana = today - timedelta(days=today.weekday())
+    tMin = iniziosettimana.isoformat() + 'T00:00:00Z'
+
+    richiestaCalendarioVecchio = service.events().list(calendarId= calendar_id, timeMin= tMin).execute()
+
+    eventiCaricati = richiestaCalendarioVecchio['items']
+    while richiestaCalendarioVecchio.get('nextPageToken'):
+      richiestaCalendarioVecchio = service.events().list(calendarId= calendar_id, pageToken= richiestaCalendarioVecchio['nextPageToken'], timeMin= tMin).execute()
+      eventiCaricati += richiestaCalendarioVecchio['items']
     
-    lista_eventi = ottieniSettimana(today.strftime("%d-%m-%Y"))
-    lista_eventi += ottieniSettimana((today + timedelta(days=7)).strftime("%d-%m-%Y"))
+    print(eventiCaricati)
+    
+    currDate = today
+    lista_eventi = []
+    while currDate < date(int(os.getenv("ANNOSEMESTRE1")), 12, 31):
+      print(currDate)
+      lista_eventi += ottieniSettimana(currDate.strftime("%d-%m-%Y"))
+      currDate += timedelta(days=7)
 
     i = 0
     j = 0
 
-    while (i < len(lista_eventi) or j < len(calendarioVecchio)):
-      if (i < len(lista_eventi) and j < len(calendarioVecchio)):
+    while (i < len(lista_eventi) or j < len(eventiCaricati)):
+      if (i < len(lista_eventi) and j < len(eventiCaricati)):
         evento_lista_date = datetime.strptime(lista_eventi[i]['start']['dateTime'], "%Y-%m-%dT%H:%M:%S")
-        vecchio_evento_date = datetime.strptime(calendarioVecchio[j]['start']['dateTime'][:-6], "%Y-%m-%dT%H:%M:%S")
+        vecchio_evento_date = datetime.strptime(eventiCaricati[j]['start']['dateTime'][:-6], "%Y-%m-%dT%H:%M:%S")
 
         if (evento_lista_date == vecchio_evento_date):
-          service.events().update(calendarId= calendar_id, eventId = calendarioVecchio[j]["id"], body=lista_eventi[i]).execute()
+          service.events().update(calendarId= calendar_id, eventId = eventiCaricati[j]["id"], body=lista_eventi[i]).execute()
           i += 1
           j += 1
           print('Event updated')
         elif (evento_lista_date > vecchio_evento_date):
-          deleteElement(service, calendarioVecchio[j]["id"], calendar_id)
+          deleteElement(service, eventiCaricati[j]["id"], calendar_id)
           j += 1
         else:
           insertElement(service, lista_eventi[i], calendar_id)
@@ -75,9 +90,10 @@ def main():
       elif (i < len(lista_eventi)):
         insertElement(service, lista_eventi[i], calendar_id)
         i += 1
-      elif (j < len(calendarioVecchio)):
-        deleteElement(service, calendarioVecchio[j]["id"], calendar_id)
+      elif (j < len(eventiCaricati)):
+        deleteElement(service, eventiCaricati[j]["id"], calendar_id)
         j += 1
+    
     
   except HttpError as error:
     print(f"An error occurred: {error}")

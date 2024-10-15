@@ -2,3 +2,8 @@ credentials.json
 token.json
 __pycache__/
 .env
+logs/
+response.json
+.venv/
+inizio
+

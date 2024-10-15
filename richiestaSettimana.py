@@ -39,9 +39,13 @@ def ottieniSettimana(req_date):
 
     #write in a json file the response in a json econded format
     lezioni = response.json()['celle']
-    with open("response.json", "w") as f:
-        json.dump(lezioni[0], f)
+    
+    if not lezioni:
+        return []
+    
     for lezione in lezioni:
+        if("nome" in lezione):
+            continue
         data = datetime.strptime(lezione['data'], "%d-%m-%Y").strftime("%Y-%m-%d")
         oraInizio = datetime.strptime(lezione['ora_inizio'], "%H:%M").strftime("%H:%M")
         oraFine = datetime.strptime(lezione['ora_fine'], "%H:%M").strftime("%H:%M")
