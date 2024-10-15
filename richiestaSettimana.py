@@ -55,8 +55,8 @@ def ottieniSettimana(req_date):
         end = f"{data}T{oraFine}:00"
         
         event = {
-            'summary': lezione['nome_insegnamento'],
-            'description': f"{lezione['docente']}, {lezione['tipo']}",
+            'summary': f"{lezione['nome_insegnamento']} - {lezione['tipo']}",
+            'description': lezione['docente'],
             'location': lezione['aula'],
             "colorId": materie[lezione['nome_insegnamento']],
             'start': {
