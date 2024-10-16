@@ -45,15 +45,15 @@ def get_user_credentials():
     return creds
 
 # returns service {}
-def build_service(serviceName):
+def build_service(service_name):
     creds = get_user_credentials()
-    serviceVersion = SERVICES[serviceName]
-    if serviceVersion == None:
+    service_version = SERVICES[service_name]
+    if service_version == None:
         print('impossibile generare il service: non in elenco')
         return None
     try:
         # crea i servizi di interfaccia con Workspace
-        service = build(serviceName, serviceVersion, credentials=creds)
+        service = build(service_name, service_version, credentials=creds)
 
     except HttpError as error:
         # intercetta errore da API, lo stampa e termina l'esecuzione
@@ -67,50 +67,50 @@ def insert_element(service, new_event, calendar_id):
     event = service.events().insert(calendarId=calendar_id, body=new_event).execute()
     print('Event created: %s' % (event.get('htmlLink')))
 
-def delete_element(service, eventId, calendar_id):
-    service.events().delete(calendarId=calendar_id, eventId=eventId).execute()
+def delete_element(service, event_id, calendar_id):
+    service.events().delete(calendarId=calendar_id, eventId=event_id).execute()
     print("Event deleted")
 
-def update_element(service, eventId, body, calendar_id):
-    service.events().update(calendarId= calendar_id, eventId = eventId, body=body).execute()
+def update_element(service, event_id, body, calendar_id):
+    service.events().update(calendarId= calendar_id, eventId = event_id, body=body).execute()
     print("Event update")
 
-def update_calendar(calendar, lista_eventi, eventiCaricati, calendar_id):
-    i = 0
-    j = 0
+def update_calendar(calendar, unife_schedule, google_calendar_events, calendar_id):
+    i, j = 0
 
-    while (i < len(lista_eventi) or j < len(eventiCaricati)):
-        if (i < len(lista_eventi) and j < len(eventiCaricati)):
-            evento_lista_date = datetime.strptime(lista_eventi[i]['start']['dateTime'], "%Y-%m-%dT%H:%M:%S")
-            vecchio_evento_date = datetime.strptime(eventiCaricati[j]['start']['dateTime'][:-6], "%Y-%m-%dT%H:%M:%S")
+    while (i < len(unife_schedule) or j < len(google_calendar_events)):
+        if (i < len(unife_schedule) and j < len(google_calendar_events)):
+            date_event_unife = datetime.strptime(unife_schedule[i]['start']['dateTime'], "%Y-%m-%dT%H:%M:%S")
+            date_event_google_calendar = datetime.strptime(google_calendar_events[j]['start']['dateTime'][:-6], "%Y-%m-%dT%H:%M:%S")
 
-            if (evento_lista_date == vecchio_evento_date):
-                calendar.events().update(calendarId= calendar_id, eventId = eventiCaricati[j]["id"], body=lista_eventi[i]).execute()
+            if (date_event_unife == date_event_google_calendar):
+                calendar.events().update(calendarId= calendar_id, eventId = google_calendar_events[j]["id"], body=unife_schedule[i]).execute()
                 i += 1
                 j += 1
                 print('Event updated')
-            elif (evento_lista_date > vecchio_evento_date):
-                delete_element(calendar, eventiCaricati[j]["id"], calendar_id)
+            elif (date_event_unife > date_event_google_calendar):
+                delete_element(calendar, google_calendar_events[j]["id"], calendar_id)
                 j += 1
             else:
-                insert_element(calendar, lista_eventi[i], calendar_id)
+                insert_element(calendar, unife_schedule[i], calendar_id)
                 i += 1
-        elif (i < len(lista_eventi)):
-            insert_element(calendar, lista_eventi[i], calendar_id)
+        elif (i < len(unife_schedule)):
+            insert_element(calendar, unife_schedule[i], calendar_id)
             i += 1
-        elif (j < len(eventiCaricati)):
-            delete_element(calendar, eventiCaricati[j]["id"], calendar_id)
+        elif (j < len(google_calendar_events)):
+            delete_element(calendar, google_calendar_events[j]["id"], calendar_id)
             j += 1
+
 def get_semester_from_calendar(calendar, calendar_id):
     today = date.today()
-    iniziosettimana = today - timedelta(days=today.weekday())
-    tMin = iniziosettimana.isoformat() + 'T00:00:00Z'
+    week_start = today - timedelta(days=today.weekday())
+    time_min = week_start.isoformat() + 'T00:00:00Z'
 
-    richiestaCalendarioVecchio = calendar.events().list(calendarId= calendar_id, timeMin= tMin).execute()
+    old_calendar_request = calendar.events().list(calendarId= calendar_id, timeMin= time_min).execute()
 
-    eventiCaricati = richiestaCalendarioVecchio['items']
-    while richiestaCalendarioVecchio.get('nextPageToken'):
-        richiestaCalendarioVecchio = calendar.events().list(calendarId= calendar_id, pageToken= richiestaCalendarioVecchio['nextPageToken'], timeMin= tMin).execute()
-        eventiCaricati += richiestaCalendarioVecchio['items']
+    google_calendar_events = old_calendar_request['items']
+    while old_calendar_request.get('nextPageToken'):
+        old_calendar_request = calendar.events().list(calendarId= calendar_id, pageToken= old_calendar_request['nextPageToken'], timeMin= time_min).execute()
+        google_calendar_events += old_calendar_request['items']
 
-    return eventiCaricati
+    return google_calendar_events

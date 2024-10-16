@@ -12,9 +12,9 @@ calendar_id = os.getenv("CALENDAR_ID")
 def main():
     calendar = build_service('calendar')
 
-    lista_eventi = get_semester_from_unife()
-    eventiCaricati = get_semester_from_calendar(calendar, calendar_id)
-    update_calendar(calendar, lista_eventi, eventiCaricati, calendar_id)
+    unife_schedule = get_semester_from_unife()
+    google_calendar_events = get_semester_from_calendar(calendar, calendar_id)
+    update_calendar(calendar, unife_schedule, google_calendar_events, calendar_id)
 
 
 
