@@ -1,5 +1,18 @@
 # Calendario lezioni unife
-<div align="center"><img src='https://www.unife.it/it/notizie/news/2019/novembre/sapere-orientare/@@images/4a82e5d7-dd6b-4b2c-93a0-a379a6e89618.jpeg' alt='unife' width="400"></div>
+
+<br>
+<div align="center">
+
+![Language](https://img.shields.io/github/languages/top/MonkeFe/GoogleCalendarUnife.svg?style=for-the-badge&labelColor=black&logo=python&logoColor=blue&label=Python)
+![linux](https://img.shields.io/badge/Linux-FCC624?style=for-the-badge&logo=linux&logoColor=black)
+![rspberry](https://img.shields.io/badge/Raspberry%20Pi-A22846?style=for-the-badge&logo=Raspberry%20Pi&logoColor=white)
+![github](https://img.shields.io/badge/GitHub-000000?style=for-the-badge&logo=github&logoColor=white)
+![WAM](https://img.shields.io/badge/WE%20ARE-MONKEYS-40A02B?style=for-the-badge&labelColor=black)
+
+<img src='https://www.unife.it/it/notizie/news/2019/novembre/sapere-orientare/@@images/4a82e5d7-dd6b-4b2c-93a0-a379a6e89618.jpeg' alt='unife' width="400">
+</div>
+<br>
+
 Questo è un semplice script che scarica le lezioni di informatica dal sito di unife e le carica in automatico su un calendario google.
 
 ## Setup API Google
