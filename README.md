@@ -63,6 +63,9 @@ pip install -r requirements.txt
 
 > Creare un file `.env` con dentro l'id del calendario, l'anno scolastico del primo semestre e l'anno scolastico del secondo semtre, un esempio si può trovare nel file `.env.example`
 
+### Setup calendari
+Il programma sincronizzerà i calendari dei corsi impostati nel file `calendar.json`, per il momento i dati sono impostati a mano in attesa di poter accedere a delle api ufficiali.
+
 ### Esecuzione
 #### Custom
 Per eseguire lo script è necessario abilitare l'ambiente virtuale:
@@ -82,3 +85,6 @@ crontab -e
 0 * * * * /abs/path/to/GoogleCalendarUnife/execute.sh
 ```
 Per cambiare il tempo tra una esecuzione e l'altra (1h come indicato precedentemente) si consiglia la [guida ufficiale](https://crontab.cronhub.io/)
+
+### TO DO
+- [ ] Gestione dei corsi facoltativi prevedendo la possibilità di scegliere di quali lezioni visualizzare l'orario
