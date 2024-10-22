@@ -156,7 +156,7 @@ def get_calendars_info(service):
         if 'description' in calendar:
             descrption = calendar['description'].split('+')
             if descrption[0] == 'UNIFE-CALENDAR-APP':
-                unife_calendars.append({"name": calendar['summary'], "calendar_id": calendar['id'], "course_id": descrption[0], "year2": descrption[1]})
+                unife_calendars.append({"name": calendar['summary'], "calendar_id": calendar['id'], "course_id": descrption[1], "year2": descrption[2]})
             
     subjects = []
             
