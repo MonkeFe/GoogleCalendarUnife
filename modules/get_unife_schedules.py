@@ -39,9 +39,6 @@ def get_week(req_date, id_course, year2):
 
     response = requests.get(url, params=payload)
     
-    with open('response.json', 'w') as f:
-        json.dump(response.json(), f)
-
     #write in a json file the response in a json econded format
     lessons = response.json()['celle']
     

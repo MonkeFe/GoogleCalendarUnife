@@ -148,18 +148,15 @@ def get_calendars_info(service):
     
     calendars_name = []
     unife_calendars = []
-    
-    if not calendars:
-        print('Calendar not found.')
-        return []
    
     print('Calendari:')
     for calendar in calendars:
         calendars_name.append(calendar['summary'])
         
-        if calendar['summary'] != 'NICOLA TIEGHI' and calendar['summary'] != 'Tasks' and calendar['id'] != 'nicola01.tieghi@edu.unife.it' and calendar['summary'] != 'Lezioni Uni':
+        if 'description' in calendar:
             descrption = calendar['description'].split('+')
-            unife_calendars.append({"name": calendar['summary'], "calendar_id": calendar['id'], "course_id": descrption[0], "year2": descrption[1]})
+            if descrption[0] == 'UNIFE-CALENDAR-APP':
+                unife_calendars.append({"name": calendar['summary'], "calendar_id": calendar['id'], "course_id": descrption[0], "year2": descrption[1]})
             
     subjects = []
             
@@ -173,7 +170,7 @@ def get_calendars_info(service):
             if sub['name'] not in calendars_name:
                 calendar = {
                     'summary': sub['name'],
-                    'description': sub['course_id'] + '+' + sub['year2'],
+                    'description': 'UNIFE-CALENDAR-APP+'+ sub['course_id'] + '+' + sub['year2'],
                     'timeZone': 'Europe/Rome',
                 }
                 created_calendar = service.calendars().insert(body=calendar).execute()
