@@ -7,7 +7,7 @@ from googleapiclient.errors import HttpError
 from google_auth_httplib2 import AuthorizedHttp
 import httplib2
 
-SCOPES = ["https://www.googleapis.com/auth/calendar", "https://www.googleapis.com/auth/gmail"]
+SCOPES = ["https://www.googleapis.com/auth/calendar", "https://mail.google.com/"]
 
 SERVICES = {
     'calendar': 'v3',

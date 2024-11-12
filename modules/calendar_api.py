@@ -21,26 +21,19 @@ def update_element(service, batch, event_id, body, calendar_id):
     print("Event update")
 
 def check_events_diff(event1, event2):
-    '''
-    event = {
-            'summary': f"{lesson['nome_insegnamento']} - {lesson['tipo']}",
-            'description': lesson['docente'],
-            'location': lesson['aula'],
-            "colorId": '1',
-            'start': {
-                'dateTime': start,
-                'timeZone': 'Europe/Rome',
-            },
-            'end': {
-                'dateTime': "{date_lesson}T{endTime}:00",
-                'timeZone': 'Europe/Rome',
-            }
-            
-        }
-        '''
     modified_fields = []
-    
 
+    for key in event1:
+        if key in event2:
+            if key != 'start' and key != 'end':
+                if event1[key] != event2[key]:
+                    print(f'\n{event2['htmlLink']}: Difference Found in {key}: {event2[key]} --> {event1[key]}')
+                    modified_fields.append({key: [event2[key],event1[key]]})
+            elif key == 'end':
+                if datetime.strptime(event1['start']['dateTime'], "%Y-%m-%dT%H:%M:%S") != datetime.strptime(event2['start']['dateTime'][:-6], "%Y-%m-%dT%H:%M:%S"):
+                    print(f'\n{event2['htmlLink']}: Difference Found in {key}: {event2[key]} --> {event1[key]}')
+                    modified_fields.append({key: [event2[key],event1[key]]})
+                
     
     return modified_fields
 
@@ -51,7 +44,6 @@ def update_calendar(calendar, unife_schedule, google_calendar_events, calendar_i
     batch = BatchHttpRequest(callback=callback, batch_uri='https://www.googleapis.com/batch/calendar/v3')
 
     while (i < len(unife_schedule) or j < len(google_calendar_events)):
-        
         if (len(batch._requests) > 20):
             batch.execute()
             batch = BatchHttpRequest(callback=callback, batch_uri='https://www.googleapis.com/batch/calendar/v3')
@@ -63,10 +55,11 @@ def update_calendar(calendar, unife_schedule, google_calendar_events, calendar_i
             
             if (date_event_unife == date_event_google_calendar):
                 batch.add(calendar.events().update(calendarId= calendar_id, eventId = google_calendar_events[j]["id"], body=unife_schedule[i]))
-                modified_events.append({'Event' : google_calendar_events[j], 'Action' : 'Updated', 'ModifiedFields': check_events_diff(unife_schedule[i], google_calendar_events[j])})
+                differences = check_events_diff(unife_schedule[i], google_calendar_events[j])
+                if differences:
+                    modified_events.append({'Event' : google_calendar_events[j], 'Action' : 'Updated', 'ModifiedFields': differences})
                 i += 1
                 j += 1
-                print('Event updated')
             elif (date_event_unife > date_event_google_calendar):
                 delete_element(calendar, batch, google_calendar_events[j]["id"], calendar_id)
                 modified_events.append({'Event' : google_calendar_events[j], 'Action' : 'Deleted', 'ModifiedFields': []})
@@ -87,6 +80,8 @@ def update_calendar(calendar, unife_schedule, google_calendar_events, calendar_i
             
     batch.execute()
     print("Batch updated")
+
+    return modified_events
 
 def get_semester_from_calendar(calendar, calendar_id):
     today = date.today()
