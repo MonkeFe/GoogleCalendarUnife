@@ -1,4 +1,3 @@
-
 from email.mime.text import MIMEText
 import base64
 

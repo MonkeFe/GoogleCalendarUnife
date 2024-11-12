@@ -1,8 +1,8 @@
 from dotenv import load_dotenv
-import os
 
+from modules.google_api import build_service
 from modules.get_unife_schedules import get_semester_from_unife
-from modules.calendar_api import update_calendar, build_service, get_semester_from_calendar, get_calendars_info
+from modules.calendar_api import update_calendar, get_semester_from_calendar, get_calendars_info
 
 load_dotenv()
 
