@@ -63,7 +63,7 @@ def get_week(req_date, id_course, year2):
             'summary': f"{lesson['nome_insegnamento']} - {lesson['tipo']}",
             'description': lesson['docente'],
             'location': lesson['aula'],
-            "colorId": '1',
+            "colorId": subjects[lesson['nome_insegnamento']],
             'start': {
                 'dateTime': start,
                 'timeZone': 'Europe/Rome',
