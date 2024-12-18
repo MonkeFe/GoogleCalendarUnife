@@ -2,23 +2,24 @@ from datetime import datetime, date, timedelta
 import json
 
 from googleapiclient.http import BatchHttpRequest
+from modules.logger import logger
 
 # Funzione di callback per gestire le risposte delle richieste batch
 def callback(request_id, response, exception):
     if exception is not None:
-        print(f"Errore nella richiesta {request_id}: {exception}")
+        logger.error(f"Errore nella richiesta {request_id}: {exception}")
         
 def insert_element(service, batch, new_event, calendar_id):
     batch.add(service.events().insert(calendarId=calendar_id, body=new_event))
-    print('Event created: %', new_event['summary'])
+    logger.info(f'Event created: {new_event["summary"]}')
 
 def delete_element(service, batch, event_id, calendar_id):
     batch.add(service.events().delete(calendarId=calendar_id, eventId=event_id))
-    print("Event deleted")
+    logger.info("Event deleted")
 
 def update_element(service, batch, event_id, body, calendar_id):
     batch.add(service.events().update(calendarId= calendar_id, eventId = event_id, body=body))
-    print("Event update")
+    logger.info("Event update")
 
 def check_events_diff(event1, event2):
     modified_fields = []
@@ -27,11 +28,11 @@ def check_events_diff(event1, event2):
         if key in event2:
             if key != 'start' and key != 'end':
                 if event1[key] != event2[key]:
-                    print(f'\n{event2['htmlLink']}: Difference Found in {key}: {event2[key]} --> {event1[key]}')
+                    logger.info(f'\n{event2["htmlLink"]}: Difference Found in {key}: {event2[key]} --> {event1[key]}')
                     modified_fields.append({key: [event2[key],event1[key]]})
             elif key == 'end':
                 if datetime.strptime(event1['start']['dateTime'], "%Y-%m-%dT%H:%M:%S") != datetime.strptime(event2['start']['dateTime'][:-6], "%Y-%m-%dT%H:%M:%S"):
-                    print(f'\n{event2['htmlLink']}: Difference Found in {key}: {event2[key]} --> {event1[key]}')
+                    logger.info(f'\n{event2["htmlLink"]}: Difference Found in {key}: {event2[key]} --> {event1[key]}')
                     modified_fields.append({key: [event2[key],event1[key]]})
                 
     
@@ -47,7 +48,7 @@ def update_calendar(calendar, unife_schedule, google_calendar_events, calendar_i
         if (len(batch._requests) > 20):
             batch.execute()
             batch = BatchHttpRequest(callback=callback, batch_uri='https://www.googleapis.com/batch/calendar/v3')
-            print("Batch updated ", len(batch._requests))
+            logger.info(f"Batch updated {len(batch._requests)}")
         
         if (i < len(unife_schedule) and j < len(google_calendar_events)):
             date_event_unife = datetime.strptime(unife_schedule[i]['start']['dateTime'], "%Y-%m-%dT%H:%M:%S")
@@ -79,7 +80,7 @@ def update_calendar(calendar, unife_schedule, google_calendar_events, calendar_i
             j += 1
             
     batch.execute()
-    print("Batch updated")
+    logger.info("Batch updated")
 
     return modified_events
 
@@ -106,7 +107,7 @@ def get_calendars_info(service):
     calendars_name = []
     unife_calendars = []
    
-    print('Calendari:')
+    logger.info('Calendari:')
     for calendar in calendars:
         calendars_name.append(calendar['summary'])
         
@@ -132,12 +133,20 @@ def get_calendars_info(service):
                 }
                 created_calendar = service.calendars().insert(body=calendar).execute()
                 
-                print(f"Calendario {created_calendar['summary']} creato")
+                logger.info(f"Calendario {created_calendar['summary']} creato")
                 
                 calendars.append(created_calendar['summary'])
                 unife_calendars.append({"name": created_calendar['summary'], "calendar_id": created_calendar['id'], "course_id": sub['course_id'], "year2": sub['year2']})
-        
-        # questo ha un bug in quanto nel caso in cui i calendari che scarica siano in un ordine diverso da quelli nel file calendar.json associa l'anno di corso a calendari sbagliati
-        unife_calendars[i]["year2"] = sub["year2"]
-                     
+                             
     return unife_calendars
+
+
+def get_shared_users_mails(service, calendar_id):
+    shared_users = service.acl().list(calendarId=calendar_id).execute()
+    shared_users_mails = []
+    
+    for user in shared_users['items']:
+        if '@edu.unife.it' in user['scope']['value']:
+            shared_users_mails.append(user['scope']['value'])
+    
+    return shared_users_mails

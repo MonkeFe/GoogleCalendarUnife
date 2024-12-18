@@ -7,6 +7,8 @@ from googleapiclient.errors import HttpError
 from google_auth_httplib2 import AuthorizedHttp
 import httplib2
 
+from modules.logger import logger
+
 SCOPES = ["https://www.googleapis.com/auth/calendar", "https://mail.google.com/"]
 
 SERVICES = {
@@ -52,7 +54,7 @@ def build_service(service_name):
     authed_http = AuthorizedHttp(creds, http=http)
     
     if service_version == None:
-        print('impossibile generare il service: non in elenco')
+        logger.error('impossibile generare il service: non in elenco')
         return None
     try:
         # crea i servizi di interfaccia con Workspace
@@ -60,7 +62,7 @@ def build_service(service_name):
 
     except HttpError as error:
         # intercetta errore da API, lo stampa e termina l'esecuzione
-        print(f'Si è verificato un errore: {error}')
+        logger.error(f'Si è verificato un errore: {error}')
         return
     
     return service

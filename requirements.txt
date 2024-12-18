@@ -4,3 +4,4 @@ google-auth-oauthlib
 python-dotenv
 requests
 httplib2
+logging

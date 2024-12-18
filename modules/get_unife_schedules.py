@@ -38,9 +38,6 @@ def get_week(req_date, id_course, year2):
     events_list = []
 
     response = requests.get(url, params=payload)
-    
-    with open('response.json', 'w') as f:
-        json.dump(response.json(), f)
 
     #write in a json file the response in a json econded format
     lessons = response.json()['celle']
@@ -82,7 +79,7 @@ def get_semester_from_unife(id_course, year2):
     
     unife_schedule = []
     
-    semester_end_date = date(int(os.getenv("ANNOSEMESTRE1")), 12, 31) if date.today() < date(int(os.getenv("ANNOSEMESTRE1")), 12, 31) else date(int(os.getenv("ANNOSEMESTRE2")), 5, 30)
+    semester_end_date = date(int(os.getenv("ANNOSEMESTRE1")), 12, 31) if date.today() < date(int(os.getenv("ANNOSEMESTRE1")), 12, 1) else date(int(os.getenv("ANNOSEMESTRE2")), 5, 30)
     
     while curr_date < semester_end_date:
         unife_schedule += get_week(curr_date.strftime("%d-%m-%Y"), id_course, year2)
