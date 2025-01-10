@@ -3,13 +3,15 @@
 # Spostati nella directory dello script
 # cd /home/midee/Documents/uni/scriptCalendario
 
+BASE_DIR=<path_to_your_project>
+
 # Controlla se la cartella logs esiste e se non c'è creala
 if [ ! -d "./logs" ]; then
-  mkdir ./logs
+  mkdir "${BASE_DIR}/logs"
 fi
 
 # Attiva il virtual environment
 source .venv/bin/activate
 
 # Specifica esplicitamente l'interprete Python dal venv
-.venv/bin/python3.12 ./index.py >> ./logs/cron_output$(date +"%Y_%m_%d__%H_%M_%S").log 2>&1
+"${BASE_DIR}/.venv/bin/python3.12" "${BASE_DIR}/index.py"
