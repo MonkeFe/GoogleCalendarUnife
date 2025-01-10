@@ -18,19 +18,24 @@ def main():
     calendars_info = get_calendars_info(calendar)
     
     for info in calendars_info:
-        logger.info("Processing calendar: " + info['name'])
-        calendar_id = info['calendar_id']
-        course_id = info['course_id']
-        
-        shared_users_mails = get_shared_users_mails(calendar, calendar_id)
-        
-        unife_schedule = get_semester_from_unife(course_id, info["year2"])
-        google_calendar_events = get_semester_from_calendar(calendar, calendar_id)
-        modified_events = update_calendar(calendar, unife_schedule, google_calendar_events, calendar_id)
-        
-        if modified_events:
-            mail_body = format_body(modified_events)
-            send_email(mail, shared_users_mails, 'Modifica Lezioni', mail_body)
+        try:
+            logger.info("Processing calendar: " + info['name'])
+            calendar_id = info['calendar_id']
+            course_id = info['course_id']
+            
+            shared_users_mails = get_shared_users_mails(calendar, calendar_id)
+            
+            unife_schedule = get_semester_from_unife(course_id, info["year2"])
+            google_calendar_events = get_semester_from_calendar(calendar, calendar_id)
+            modified_events = update_calendar(calendar, unife_schedule, google_calendar_events, calendar_id)
+            
+            if modified_events:
+                mail_body = format_body(modified_events)
+                send_email(mail, shared_users_mails, 'Modifica Lezioni', mail_body)
+        except Exception as e:
+            logger.error(f"Errore: {e}")
+            logger.info("Errore lettura calendario")
+            continue
 
 
 if __name__ == "__main__":

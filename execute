@@ -3,7 +3,7 @@
 # Spostati nella directory dello script
 # cd /home/midee/Documents/uni/scriptCalendario
 
-BASE_DIR=<path_to_your_project>
+BASE_DIR="/home/nicola/Documents/GoogleCalendarUnife"
 
 # Controlla se la cartella logs esiste e se non c'è creala
 if [ ! -d "./logs" ]; then

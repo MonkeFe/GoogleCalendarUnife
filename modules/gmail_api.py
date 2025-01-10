@@ -63,6 +63,7 @@ def format_body(modified_events):
                     body += f'<li>{key}: {field[key][0]} -> {field[key][1]}</li>'
             body += '</ul>'
     
-    with open('email.html', 'w') as f:
-        f.write(body)
+    # with open('email.html', 'w') as f:
+    #    f.write(body)
+    
     return body
