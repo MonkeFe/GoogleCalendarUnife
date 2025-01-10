@@ -32,11 +32,15 @@ def main():
             if modified_events:
                 mail_body = format_body(modified_events)
                 send_email(mail, shared_users_mails, 'Modifica Lezioni', mail_body)
+                #send_email("nicola01.tieghi@edu.unife.it, michele.debiagi@edu.unife.it", shared_users_mails, 'Modifica Lezioni', mail_body)
+
 
         except Exception as e:
             logger.error(f"Errore: {e}")
             logger.info("Errore lettura calendario")
             continue
+
+    logger.info('Fine esecuzione')
             
 
 if __name__ == "__main__":

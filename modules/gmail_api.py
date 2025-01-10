@@ -1,6 +1,8 @@
 from email.mime.text import MIMEText
 import base64
 from datetime import datetime
+from modules.logger import logger
+
 
 def send_email(service, email_adresses, subject, email_message):
     # Creazione del body
@@ -17,9 +19,9 @@ def send_email(service, email_adresses, subject, email_message):
     # Invio dell'email
     try:
         message = service.users().messages().send(userId='me', body={'raw': raw_message}).execute()
-        print(f'body inviato. ID: {message['id']}')
+        logger.info(f'body inviato. ID: {message['id']}')
     except Exception as e:
-        print(f'Si è verificato un errore: {e}')
+        logger.error(f'Si è verificato un errore: {e}')
 
 def switch_key_name(key):
     match key:
@@ -36,6 +38,20 @@ def format_body(modified_events):
     created_events = [event for event in modified_events if event['Action'] == 'Created']
     deleted_events = [event for event in modified_events if event['Action'] == 'Deleted']
     updated_events = [event for event in modified_events if event['Action'] == 'Updated']
+    moved_events = []
+
+    name_deleted_events = [event['Event']['summary'] for event in deleted_events]
+
+    for event in created_events:
+        if event['Event']['summary'] in name_deleted_events:
+            index_deleted_event = name_deleted_events.index(event['Event']["summary"])
+            print(index_deleted_event)
+            moved_events.append([event, deleted_events[index_deleted_event]])
+            created_events.remove(event)
+            deleted_events.pop(index_deleted_event)
+            name_deleted_events.pop(index_deleted_event)
+
+    logger.info(f'Moved events: {moved_events}')
     
     body = ''
     if created_events:
@@ -81,14 +97,17 @@ def format_body(modified_events):
                     body += f'<td style="border: 1px solid;padding:5px;">{field[key][1]}</td></tr>'
             body += '</table><br>'
 
-            '''
-            body += '<ul>'
-            for field in event['ModifiedFields']:
-                for key in field:
-                    body += f'<li><b>{key}</b>: {field[key][0]} => {field[key][1]}</li>'
-            body += '</ul></p><br><br>'
-            '''
-    
+    if moved_events:
+        body += '<h1>Lezioni Spostate</h1>'
+       
+        body += f'<table style="border: 1px solid;border-collapse:collapse;margin-top:3vh;"><th style="border: 1px solid;padding:5px;text-align:center;">Lezione</th><th style="border: 1px solid;padding:5px;text-align:center;">Data Precedente</th><th style="border: 1px solid;padding:5px;text-align:center;">Nuova Data</th>'
+        
+        for event in moved_events:
+            body += f'<tr style="border: 1px solid;"><td style="border: 1px solid;padding:5px;">{event[0]["Event"]['summary']}</td>'
+            body += f'<td style="border: 1px solid;padding:5px;">{event[1]['Event']['start']['dateTime'][:- 9]}</td>'
+            body += f'<td style="border: 1px solid;padding:5px;">{event[0]['Event']['start']['dateTime'][:- 9]}</td></tr>'
+        body += '</table>'
+
     '''
     with open('email.html', 'w') as f:
         f.write(body)
