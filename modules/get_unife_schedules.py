@@ -3,7 +3,7 @@ import json
 from datetime import date, timedelta, datetime
 import os.path
 
-subjects = {"ISTITUZIONI DI MATEMATICA": "1", "PROGRAMMAZIONE E LABORATORIO" : "2", "ECONOMIA E GESTIONE AZIENDALE" : "3", "LINGUA INGLESE: VERIFICA DELLE CONOSCENZE" : "4"}
+subjects = {"ISTITUZIONI DI MATEMATICA": "1", "PROGRAMMAZIONE E LABORATORIO" : "2", "ECONOMIA E GESTIONE AZIENDALE" : "3", "LINGUA INGLESE: VERIFICA DELLE CONOSCENZE" : "4", "MATEMATICA DISCRETA": "1", "CALCOLO DELLE PROBABILITA' E STATISTICA" : "2", "ARCHITETTURA DEGLI ELABORATORI E LABORATORIO" : "3", "FISICA" : "4"}
 
 
 def get_week(req_date, id_course, year2):
@@ -60,7 +60,7 @@ def get_week(req_date, id_course, year2):
         end = f"{date_lesson}T{endTime}:00"
         
         event = {
-            'summary': f"{lesson['nome_insegnamento']} - {lesson['tipo']}",
+            'summary': f"{lesson['tipo']} di {lesson['nome_insegnamento']}",
             'description': lesson['docente'],
             'location': lesson['aula'],
             "colorId": subjects[lesson['nome_insegnamento']],
@@ -82,7 +82,7 @@ def get_semester_from_unife(id_course, year2):
     
     unife_schedule = []
     
-    semester_end_date = date(int(os.getenv("ANNOSEMESTRE1")), 12, 31) if date.today() < date(int(os.getenv("ANNOSEMESTRE1")), 12, 31) else date(int(os.getenv("ANNOSEMESTRE2")), 5, 30)
+    semester_end_date = date(int(os.getenv("ANNOSEMESTRE1")), 12, 31) if date.today() < date(int(os.getenv("ANNOSEMESTRE1")), 11, 15) else date(int(os.getenv("ANNOSEMESTRE2")), 5, 30)
     
     while curr_date < semester_end_date:
         unife_schedule += get_week(curr_date.strftime("%d-%m-%Y"), id_course, year2)

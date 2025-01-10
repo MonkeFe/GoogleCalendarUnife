@@ -39,8 +39,8 @@ def main():
     if modified_events:
         mail_body = format_body(modified_events)
         #send_email(mail, ['michele.debiagi@edu.unife.it'], 'Modifica Lezioni', mail_body, logger)
-        send_email(mail, shared_users_mails, 'Modifica Lezioni', mail_body, logger)
         '''
+        send_email(mail, shared_users_mails, 'Modifica Lezioni', mail_body, logger)
         '''
     logger.info('Fine esecuzione')
 
