@@ -107,7 +107,6 @@ def get_calendars_info(service):
     calendars_name = []
     unife_calendars = []
    
-    logger.info('Calendari:')
     for calendar in calendars:
         calendars_name.append(calendar['summary'])
         

@@ -9,7 +9,7 @@ def send_email(service, email_adresses, subject, email_message):
     message = MIMEText(email_message, 'html')
     
     # Array di email destinatari
-    message['to'] = ', '.join(email_adresses)  # Unisce gli indirizzi email con virgola e spazio
+    message['to'] = email_adresses  # Unisce gli indirizzi email con virgola e spazio
     
     message['subject'] = subject
     
@@ -38,18 +38,21 @@ def format_body(modified_events):
     created_events = [event for event in modified_events if event['Action'] == 'Created']
     deleted_events = [event for event in modified_events if event['Action'] == 'Deleted']
     updated_events = [event for event in modified_events if event['Action'] == 'Updated']
+    
+    
     moved_events = []
+    name_deleted_events = [event['Event']['summary'] for event in deleted_events]  
+    i = 0
 
-    name_deleted_events = [event['Event']['summary'] for event in deleted_events]
-
-    for event in created_events:
-        if event['Event']['summary'] in name_deleted_events:
-            index_deleted_event = name_deleted_events.index(event['Event']["summary"])
-            print(index_deleted_event)
-            moved_events.append([event, deleted_events[index_deleted_event]])
-            created_events.remove(event)
+    while len(created_events) > i:
+        if created_events[i]['Event']['summary'] in name_deleted_events:
+            index_deleted_event = name_deleted_events.index(created_events[i]['Event']['summary'])
+            moved_events.append([deleted_events[index_deleted_event], created_events[i]])
+            created_events.pop(i)
             deleted_events.pop(index_deleted_event)
             name_deleted_events.pop(index_deleted_event)
+        else:
+            i += 1
 
     logger.info(f'Moved events: {moved_events}')
     
@@ -61,7 +64,7 @@ def format_body(modified_events):
         body += f'<table style="border: 1px solid;border-collapse:collapse;margin-top:3vh;"><th style="border: 1px solid;padding:5px;text-align:center;">Lezione</th><th style="border: 1px solid;padding:5px;text-align:center;">Data</th><th style="border: 1px solid;padding:5px;text-align:center;">Orario</th>'
         
         for event in created_events:
-            body += f'<tr style="border: 1px solid;"><td style="border: 1px solid;padding:5px;">{event["Event"]['summary']}</td>'
+            body += f'<tr style="border: 1px solid;"><td style="border: 1px solid;padding:5px;">{event['Event']['summary']}</a></td>'
             body += f'<td style="border: 1px solid;padding:5px;">{event['Event']['start']['dateTime'][:-9]}</td>'
             body += f'<td style="border: 1px solid;padding:5px;">{event['Event']['start']['dateTime'][len(event['Event']['start']['dateTime']) - 8 : -3]} - {event['Event']['end']['dateTime'][len(event['Event']['end']['dateTime']) - 8 : -3]}</td></tr>'
         body += '</table>'
@@ -97,6 +100,7 @@ def format_body(modified_events):
                     body += f'<td style="border: 1px solid;padding:5px;">{field[key][1]}</td></tr>'
             body += '</table><br>'
 
+
     if moved_events:
         body += '<h1>Lezioni Spostate</h1>'
        
@@ -104,8 +108,9 @@ def format_body(modified_events):
         
         for event in moved_events:
             body += f'<tr style="border: 1px solid;"><td style="border: 1px solid;padding:5px;">{event[0]["Event"]['summary']}</td>'
-            body += f'<td style="border: 1px solid;padding:5px;">{event[1]['Event']['start']['dateTime'][:- 9]}</td>'
-            body += f'<td style="border: 1px solid;padding:5px;">{event[0]['Event']['start']['dateTime'][:- 9]}</td></tr>'
+            body += f'<td style="border: 1px solid;padding:5px;">{event[0]['Event']['start']['dateTime'][:- 15]} {event[0]['Event']['start']['dateTime'][len(event[0]['Event']['start']['dateTime']) - 14 : -9]} - {event[0]['Event']['end']['dateTime'][len(event[0]['Event']['end']['dateTime']) - 14 : -9]}</td>'
+            body += f'<td style="border: 1px solid;padding:5px;">{event[1]['Event']['start']['dateTime'][:-9]} {event[1]['Event']['start']['dateTime'][len(event[1]['Event']['start']['dateTime']) - 8 : -3]} - {event[1]['Event']['end']['dateTime'][len(event[1]['Event']['end']['dateTime']) - 8 : -3]}</td></tr>'
+            
         body += '</table>'
 
     '''
