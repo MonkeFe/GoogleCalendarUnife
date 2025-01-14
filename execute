@@ -3,15 +3,10 @@
 # Spostati nella directory dello script
 # cd /home/midee/Documents/uni/scriptCalendario
 
-BASE_DIR="/home/midee/Documents/uni/scriptCalendario"
-
-# Controlla se la cartella logs esiste e se non c'è creala
-if [ ! -d "./logs" ]; then
-  mkdir "${BASE_DIR}/logs"
-fi
+BASE_DIR="/Users/nicola/Documents/GoogleCalendarUnife"
 
 # Attiva il virtual environment
 source "${BASE_DIR}/.venv/bin/activate"
 
 # Specifica esplicitamente l'interprete Python dal venv
-"${BASE_DIR}/.venv/bin/python3.12" "${BASE_DIR}/index.py"
+"${BASE_DIR}/.venv/bin/python3" "${BASE_DIR}/index.py"
