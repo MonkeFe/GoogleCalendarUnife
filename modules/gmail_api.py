@@ -1,6 +1,7 @@
 from email.mime.text import MIMEText
 import base64
 from datetime import datetime
+from dateutil import parser
 from modules.logger import logger
 
 def send_email(service, email_adresses, subject, email_message):
@@ -66,11 +67,14 @@ def format_body(modified_events):
         
         if updated_events:
             body += "<h1>Lezioni Modificate</h1>"
-            currDate = datetime.strptime(updated_events[0]['Event']['start']['dateTime'], "%Y-%m-%dT%H:%M:%S").date()
+            # Use parser.parse() instead of manual datetime parsing
+            currDate = parser.parse(updated_events[0]['Event']['start']['dateTime']).date()
             body += f"<h2>{currDate}</h2>"
             for event in updated_events:
-                if datetime.strptime(event['Event']['start']['dateTime'], "%Y-%m-%dT%H:%M:%S").date() != currDate:
-                    currDate = datetime.strptime(event['Event']['start']['dateTime'], "%Y-%m-%dT%H:%M:%S").date()
+                # Use parser.parse() for more robust date handling
+                event_date = parser.parse(event['Event']['start']['dateTime']).date()
+                if event_date != currDate:
+                    currDate = event_date
                     body += f"<h2>{currDate}</h2>"
 
                 body += f"<h3>{event['Event']['summary']}</h3><i>Per vedere la lezione aggiornata clicca <a href='{event['Event']['htmlLink']}'>qui</a></i><br><p>Modifiche Effettuate:"         

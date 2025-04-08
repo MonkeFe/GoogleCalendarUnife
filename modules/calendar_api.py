@@ -8,15 +8,20 @@ from modules.logger import logger
 # Funzione di callback per gestire le risposte delle richieste batch
 def callback(request_id, response, exception):
     if exception is not None:
-        logger.error(f"Errore nella richiesta {request_id}: {exception}")
+        logger.error(f"Errore nella richiesta (calendar_api.py 1) {request_id}: {exception}")
 
 # Helper function to parse dates consistently
 def parse_datetime(datetime_str):
-    """Parse a datetime string and return a datetime object, handling timezone information"""
+    """
+    Parse a datetime string and return a datetime object, handling timezone information
+    by consistently removing timezone info for reliable comparisons
+    """
     try:
-        return parser.parse(datetime_str)
+        dt = parser.parse(datetime_str)
+        # Always return naive datetime (without timezone info) for consistent comparisons
+        return dt.replace(tzinfo=None) if dt else None
     except Exception as e:
-        logger.error(f"Error parsing datetime: {datetime_str}, error: {e}")
+        logger.error(f"Error parsing datetime (calendar_api.py 2): {datetime_str}, error: {e}")
         return None
         
 def insert_element(service, batch, new_event, calendar_id):
