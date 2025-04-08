@@ -1,0 +1,14 @@
+#!/bin/bash
+
+# Set full path to project directory
+BASE_DIR=""
+cd "${BASE_DIR}"
+
+# Export the ABSOLUTEPATH variable directly
+export ABSOLUTEPATH="${BASE_DIR}"
+
+# Activate virtual environment
+source "${BASE_DIR}/.venv/bin/activate"
+
+# Run Python script with full path
+"${BASE_DIR}/.venv/bin/python3" "${BASE_DIR}/index.py" 2>> "${BASE_DIR}/logs/cron_error.log"

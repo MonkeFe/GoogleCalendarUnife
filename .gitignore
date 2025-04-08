@@ -4,3 +4,4 @@ creds/
 logs/
 .env
 clearAllEvents.py
+execute
