@@ -3,7 +3,7 @@ import json
 from datetime import date, timedelta, datetime
 import os.path
 
-subjects = {"ISTITUZIONI DI MATEMATICA": "1", "PROGRAMMAZIONE E LABORATORIO" : "2", "ECONOMIA E GESTIONE AZIENDALE" : "3", "LINGUA INGLESE: VERIFICA DELLE CONOSCENZE" : "4"}
+subjects = {"ISTITUZIONI DI MATEMATICA": "1", "PROGRAMMAZIONE E LABORATORIO" : "2", "ECONOMIA E GESTIONE AZIENDALE" : "3", "LINGUA INGLESE: VERIFICA DELLE CONOSCENZE" : "4", "MATEMATICA DISCRETA": "1", "CALCOLO DELLE PROBABILITA' E STATISTICA" : "2", "ARCHITETTURA DEGLI ELABORATORI E LABORATORIO" : "3", "FISICA" : "4"}
 
 
 def get_week(req_date, id_course, year2):
@@ -60,7 +60,7 @@ def get_week(req_date, id_course, year2):
             'summary': f"{lesson['nome_insegnamento']} - {lesson['tipo']}",
             'description': lesson['docente'],
             'location': lesson['aula'],
-            "colorId": '1',
+            "colorId": subjects[lesson['nome_insegnamento']],
             'start': {
                 'dateTime': start,
                 'timeZone': 'Europe/Rome',
