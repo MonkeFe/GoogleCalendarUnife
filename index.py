@@ -29,7 +29,7 @@ def main():
             modified_events = update_calendar(calendar, unife_schedule, google_calendar_events, calendar_id)
         
         except Exception as e:
-            logger.error(f"Errore: {e}")
+            logger.error(f"Errore index.py 1: {e}")
             logger.info("Errore calendario")
             continue
         try:
@@ -37,11 +37,9 @@ def main():
                 mail_body = format_body(modified_events)
                 send_email(mail, shared_users_mails, 'Modifica Lezioni', mail_body)
         except Exception as e:
-            logger.error(f"Errore: {e}")
+            logger.error(f"Errore index.py 2 (email): {e}")
             logger.info("Errore email")
             continue
-            '''
-            '''
 
 
 

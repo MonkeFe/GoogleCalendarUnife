@@ -1,4 +1,5 @@
-from datetime import datetime, date, timedelta
+from datetime import date, timedelta
+from dateutil import parser
 import json
 
 from googleapiclient.http import BatchHttpRequest
@@ -8,6 +9,15 @@ from modules.logger import logger
 def callback(request_id, response, exception):
     if exception is not None:
         logger.error(f"Errore nella richiesta {request_id}: {exception}")
+
+# Helper function to parse dates consistently
+def parse_datetime(datetime_str):
+    """Parse a datetime string and return a datetime object, handling timezone information"""
+    try:
+        return parser.parse(datetime_str)
+    except Exception as e:
+        logger.error(f"Error parsing datetime: {datetime_str}, error: {e}")
+        return None
         
 def insert_element(service, batch, new_event, calendar_id):
     batch.add(service.events().insert(calendarId=calendar_id, body=new_event))
@@ -30,11 +40,14 @@ def check_events_diff(event1, event2):
                 if event1[key] != event2[key]:
                     logger.info(f'\n{event2["htmlLink"]}: Difference Found in {key}: {event2[key]} --> {event1[key]}')
                     modified_fields.append({key: [event2[key],event1[key]]})
-            elif key == 'end':
-                if datetime.strptime(event1['start']['dateTime'], "%Y-%m-%dT%H:%M:%S") != datetime.strptime(event2['start']['dateTime'][:-6], "%Y-%m-%dT%H:%M:%S"):
+            elif key == 'end' or key == 'start':
+                # Use the new parser for both datetime strings
+                dt1 = parse_datetime(event1[key]['dateTime'])
+                dt2 = parse_datetime(event2[key]['dateTime'])
+                
+                if dt1 != dt2:
                     logger.info(f'\n{event2["htmlLink"]}: Difference Found in {key}: {event2[key]} --> {event1[key]}')
                     modified_fields.append({key: [event2[key],event1[key]]})
-                
     
     return modified_fields
 
@@ -51,17 +64,26 @@ def update_calendar(calendar, unife_schedule, google_calendar_events, calendar_i
             logger.info(f"Batch updated {len(batch._requests)}")
         
         if (i < len(unife_schedule) and j < len(google_calendar_events)):
-            date_event_unife = datetime.strptime(unife_schedule[i]['start']['dateTime'], "%Y-%m-%dT%H:%M:%S")
-            date_event_google_calendar = datetime.strptime(google_calendar_events[j]['start']['dateTime'][:-6], "%Y-%m-%dT%H:%M:%S")
+            # Use the new parser for both datetime strings
+            date_event_unife = parse_datetime(unife_schedule[i]['start']['dateTime'])
+            date_event_google_calendar = parse_datetime(google_calendar_events[j]['start']['dateTime'])
             
-            if (date_event_unife == date_event_google_calendar):
+            # Compare times ignoring timezone differences
+            same_time = False
+            if date_event_unife and date_event_google_calendar:
+                unife_naive = date_event_unife.replace(tzinfo=None)
+                google_naive = date_event_google_calendar.replace(tzinfo=None)
+                same_time = unife_naive == google_naive
+            
+            if same_time:
                 batch.add(calendar.events().update(calendarId= calendar_id, eventId = google_calendar_events[j]["id"], body=unife_schedule[i]))
                 differences = check_events_diff(unife_schedule[i], google_calendar_events[j])
                 if differences:
                     modified_events.append({'Event' : google_calendar_events[j], 'Action' : 'Updated', 'ModifiedFields': differences})
                 i += 1
                 j += 1
-            elif (date_event_unife > date_event_google_calendar):
+            elif (not date_event_unife or not date_event_google_calendar or 
+                  date_event_unife.replace(tzinfo=None) > date_event_google_calendar.replace(tzinfo=None)):
                 delete_element(calendar, batch, google_calendar_events[j]["id"], calendar_id)
                 modified_events.append({'Event' : google_calendar_events[j], 'Action' : 'Deleted', 'ModifiedFields': []})
                 j += 1
