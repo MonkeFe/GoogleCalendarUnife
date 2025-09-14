@@ -9,7 +9,7 @@ import httplib2
 
 from modules.logger import logger
 
-SCOPES = ["https://www.googleapis.com/auth/calendar", "https://mail.google.com/"]
+SCOPES = ["https://www.googleapis.com/auth/calendar", "https://www.googleapis.com/auth/gmail.send"]
 
 SERVICES = {
     'calendar': 'v3',

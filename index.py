@@ -48,7 +48,7 @@ def main():
 
 
     logger.info('Fine esecuzione')
-    logger.info('')
+    logger.info('-' * 70)
             
 
 if __name__ == "__main__":

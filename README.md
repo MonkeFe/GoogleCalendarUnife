@@ -46,7 +46,7 @@ Vai a credenziali
 3. Nel campo **Nome**, digita un nome per la credenziale. Questo nome viene visualizzato solo nella console Google Cloud.
 4. Fai clic su **Crea**. Viene visualizzata la schermata di creazione del client OAuth, che mostra il nuovo ID client e il nuovo client secret.
 5. Fai clic su **OK**. Le credenziali appena create vengono visualizzate nella sezione **ID client OAuth 2.0**.
-6. Salva il file JSON scaricato come credentials.json e sposta il nella directory di lavoro.
+6. Salva il file JSON scaricato come credentials.json e sposta il nella directory di lavoro nella cartella creds.
 
 
 ## Setup Progetto
