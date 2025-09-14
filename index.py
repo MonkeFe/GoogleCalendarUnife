@@ -39,7 +39,7 @@ def main():
         try:
             if modified_events:
                 mail_body = format_body(modified_events)
-                send_email(mail, shared_users_mails, 'Modifica Lezioni', mail_body)
+                #send_email(mail, shared_users_mails, 'Modifica Lezioni', mail_body)
         except Exception as e:
             logger.error(f"Errore index.py 3 (email): {e}")
             logger.info("Errore email")

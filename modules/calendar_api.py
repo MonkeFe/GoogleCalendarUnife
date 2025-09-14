@@ -23,6 +23,43 @@ def parse_datetime(datetime_str):
     except Exception as e:
         logger.error(f"Error parsing datetime (calendar_api.py 2): {datetime_str}, error: {e}")
         return None
+
+def event_key(event):
+    """Create a stable key for an event to help deduplicate items.
+    Uses summary, start, end, and location when available."""
+    try:
+        summary = event.get('summary', '').strip()
+        location = event.get('location', '').strip()
+        start_dt = event.get('start', {}).get('dateTime')
+        end_dt = event.get('end', {}).get('dateTime')
+        return (
+            summary,
+            parse_datetime(start_dt) if start_dt else None,
+            parse_datetime(end_dt) if end_dt else None,
+            location,
+        )
+    except Exception:
+        return (None, None, None, None)
+
+def sort_events(events):
+    """Return a new list of events sorted by start then end time."""
+    def sort_key(ev):
+        s = parse_datetime(ev.get('start', {}).get('dateTime')) if ev.get('start') else None
+        e = parse_datetime(ev.get('end', {}).get('dateTime')) if ev.get('end') else None
+        return (s or date.min, e or date.min)
+    return sorted(events, key=sort_key)
+
+def dedupe_events(events):
+    """Remove duplicates preserving order based on event_key."""
+    seen = set()
+    result = []
+    for ev in events:
+        k = event_key(ev)
+        if k in seen:
+            continue
+        seen.add(k)
+        result.append(ev)
+    return result
         
 def insert_element(service, batch, new_event, calendar_id):
     batch.add(service.events().insert(calendarId=calendar_id, body=new_event))
@@ -59,14 +96,21 @@ def check_events_diff(event1, event2):
 def update_calendar(calendar, unife_schedule, google_calendar_events, calendar_id):
     modified_events = []
     i = j = 0
-    
+
+    # Ensure deterministic processing to avoid duplicates
+    orig_unife_len = len(unife_schedule)
+    orig_google_len = len(google_calendar_events)
+    unife_schedule = dedupe_events(sort_events(unife_schedule))
+    google_calendar_events = sort_events(google_calendar_events)
+    logger.info(f"Sync prep: unife {orig_unife_len}->{len(unife_schedule)}, google {orig_google_len} sorted")
+
     batch = BatchHttpRequest(callback=callback, batch_uri='https://www.googleapis.com/batch/calendar/v3')
 
     while (i < len(unife_schedule) or j < len(google_calendar_events)):
         if (len(batch._requests) > 20):
             batch.execute()
+            logger.info("Batch executed (chunk)")
             batch = BatchHttpRequest(callback=callback, batch_uri='https://www.googleapis.com/batch/calendar/v3')
-            logger.info(f"Batch updated {len(batch._requests)}")
         
         if (i < len(unife_schedule) and j < len(google_calendar_events)):
             # Use the new parser for both datetime strings
@@ -81,9 +125,10 @@ def update_calendar(calendar, unife_schedule, google_calendar_events, calendar_i
                 same_time = unife_naive == google_naive
             
             if same_time:
-                batch.add(calendar.events().update(calendarId= calendar_id, eventId = google_calendar_events[j]["id"], body=unife_schedule[i]))
+                # Only update if there are differences
                 differences = check_events_diff(unife_schedule[i], google_calendar_events[j])
                 if differences:
+                    batch.add(calendar.events().update(calendarId= calendar_id, eventId = google_calendar_events[j]["id"], body=unife_schedule[i]))
                     modified_events.append({'Event' : google_calendar_events[j], 'Action' : 'Updated', 'ModifiedFields': differences})
                 i += 1
                 j += 1
@@ -107,7 +152,7 @@ def update_calendar(calendar, unife_schedule, google_calendar_events, calendar_i
             j += 1
             
     batch.execute()
-    logger.info("Batch updated")
+    logger.info("Batch executed (final)")
 
     return modified_events
 
@@ -116,15 +161,23 @@ def get_semester_from_calendar(calendar, calendar_id):
     week_start = today - timedelta(days=today.weekday())
     time_min = week_start.isoformat() + 'T00:00:00Z'
 
-    old_calendar_request = calendar.events().list(calendarId=calendar_id, timeMin=time_min, orderBy='startTime', singleEvents=True).execute()
+    params = {
+        'calendarId': calendar_id,
+        'timeMin': time_min,
+        'orderBy': 'startTime',
+        'singleEvents': True,
+        'maxResults': 2500,  # opzionale
+    }
 
-    google_calendar_events = old_calendar_request['items']
-    
+    old_calendar_request = calendar.events().list(**params).execute()
+    google_calendar_events = old_calendar_request.get('items', [])
+
     while old_calendar_request.get('nextPageToken'):
-        old_calendar_request = calendar.events().list(calendarId= calendar_id, pageToken= old_calendar_request['nextPageToken'], timeMin= time_min).execute()
-        google_calendar_events += old_calendar_request['items']
-        
-    
+        params['pageToken'] = old_calendar_request['nextPageToken']
+        old_calendar_request = calendar.events().list(**params).execute()
+        google_calendar_events += old_calendar_request.get('items', [])
+        params.pop('pageToken', None)
+
     return google_calendar_events
 
 def get_calendars_info(service):
