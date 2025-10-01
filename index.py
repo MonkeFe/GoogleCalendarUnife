@@ -19,7 +19,8 @@ def main():
         calendars_info = get_calendars_info(calendar)
     except Exception as e:
         logger.error("Errore calendars_info (index.py 1): ", e)
-        
+    print(calendars_info)
+    exit()
     for info in calendars_info:
         try:
             logger.info("Processing calendar: " + info['name'])
@@ -29,6 +30,8 @@ def main():
             shared_users_mails = get_shared_users_mails(calendar, calendar_id)
                 
             unife_schedule = get_semester_from_unife(course_id, info["year2"])
+            print(unife_schedule)
+            exit()
             google_calendar_events = get_semester_from_calendar(calendar, calendar_id)
             modified_events = update_calendar(calendar, unife_schedule, google_calendar_events, calendar_id)
         
@@ -39,7 +42,7 @@ def main():
         try:
             if modified_events:
                 mail_body = format_body(modified_events)
-                send_email(mail, shared_users_mails, 'Modifica Lezioni', mail_body)
+                #send_email(mail, shared_users_mails, 'Modifica Lezioni', mail_body)
         except Exception as e:
             logger.error(f"Errore index.py 3 (email): {e}")
             logger.info("Errore email")

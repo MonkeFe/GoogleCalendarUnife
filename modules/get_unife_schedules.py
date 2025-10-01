@@ -46,7 +46,7 @@ def get_week(req_date, id_course, year2):
         "empty_box": "0",
         "only_grid": "0",
         "highlighted_date": "0",
-        "all_events": "1",
+        "all_events": "0",
         "faculty_group": "0",
     }
 
@@ -67,8 +67,8 @@ def get_week(req_date, id_course, year2):
             date_lesson = datetime.strptime(lesson['data'], "%d-%m-%Y").strftime("%Y-%m-%d")
             start_time = datetime.strptime(lesson['ora_inizio'], "%H:%M").strftime("%H:%M")
             endTime = datetime.strptime(lesson['ora_fine'], "%H:%M").strftime("%H:%M")
-            
-            # Skip lessons before the current week
+
+            # Skip lessons before the current week -- May be removed, we keep this for now
             current_week_start = datetime.today() - timedelta(days=datetime.today().weekday())
             lesson_date_obj = datetime.strptime(date_lesson, "%Y-%m-%d")
             if lesson_date_obj < current_week_start:
