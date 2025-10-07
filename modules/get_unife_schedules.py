@@ -69,8 +69,8 @@ def get_week(req_date, id_course, year2):
             endTime = datetime.strptime(lesson['ora_fine'], "%H:%M").strftime("%H:%M")
 
             # Skip lessons before the current week -- May be removed, we keep this for now
-            current_week_start = datetime.today() - timedelta(days=datetime.today().weekday())
-            lesson_date_obj = datetime.strptime(date_lesson, "%Y-%m-%d")
+            current_week_start = datetime.today().date() - timedelta(days=datetime.today().weekday())
+            lesson_date_obj = datetime.strptime(date_lesson, "%Y-%m-%d").date()
             if lesson_date_obj < current_week_start:
                 continue
 
