@@ -11,4 +11,4 @@ export ABSOLUTEPATH="${BASE_DIR}"
 source "${BASE_DIR}/.venv/bin/activate"
 
 # Run Python script with full path
-"${BASE_DIR}/.venv/bin/python3" "${BASE_DIR}/index.py" 2>> "${BASE_DIR}/logs/cron_error.log"
+"${BASE_DIR}/.venv/bin/python3" "${BASE_DIR}/index.py" --sendMail 2>> "${BASE_DIR}/logs/cron_error.log"

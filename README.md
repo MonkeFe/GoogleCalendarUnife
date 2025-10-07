@@ -67,6 +67,8 @@ pip install -r requirements.txt
 Il programma sincronizzerà i calendari dei corsi impostati nel file `calendar.json`, per il momento i dati sono impostati a mano in attesa di poter accedere a delle api ufficiali.
 
 ### Esecuzione
+Usare la flag `--sendMail` se si vuole inviare un'email con gli aggiornamenti agli eventi
+
 #### Custom
 Per eseguire lo script è necessario abilitare l'ambiente virtuale:
 ```bash
