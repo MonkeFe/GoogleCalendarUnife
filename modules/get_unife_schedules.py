@@ -79,7 +79,7 @@ def get_week(req_date, id_course, year2):
             end = f"{date_lesson}T{endTime}:00"
             
             event = {
-                'summary': f"{lesson['nome_insegnamento']} - {lesson['tipo']}",
+                'summary': f"{lesson['tipo'].split()[0]} - {lesson['nome_insegnamento']}",
                 'description': lesson['docente'],
                 'location': lesson['aula'],
                 "colorId": subjects[lesson['nome_insegnamento']],
