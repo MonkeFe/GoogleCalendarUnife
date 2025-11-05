@@ -19,12 +19,11 @@ def get_week(req_date, id_course, year2):
     url = "https://aule.unife.it/AgendaStudenti/grid_call.php"
 
     headers = {
-        "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36",
+        "User-Agent": "Scrivete delle api migliori per scaricare le lezioni, grazie!",
         "Accept": "*/*",
         "Accept-Language": "en-US,en;q=0.9",
         "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
         "Origin": "https://aule.unife.it",
-        "Referer": "https://aule.unife.it/AgendaStudenti/index.php?view=easycourse&form-type=corso&include=corso&txtcurr=2+-+Percorso+Comune&anno=2025&corso=1233&anno2%5B%5D=PDS0%7C2&date=14-09-2025&periodo_didattico=&_lang=en&list=&week_grid_type=-1&ar_codes_=&ar_select_=&col_cells=0&empty_box=0&only_grid=0&highlighted_date=0&all_events=0&faculty_group=0",
         "X-Requested-With": "XMLHttpRequest",
     }
 
@@ -47,7 +46,7 @@ def get_week(req_date, id_course, year2):
         "empty_box": "0",
         "only_grid": "0",
         "highlighted_date": "0",
-        "all_events": "1",
+        "all_events": "0",
         "faculty_group": "0",
     }
 
@@ -69,12 +68,18 @@ def get_week(req_date, id_course, year2):
             start_time = datetime.strptime(lesson['ora_inizio'], "%H:%M").strftime("%H:%M")
             endTime = datetime.strptime(lesson['ora_fine'], "%H:%M").strftime("%H:%M")
 
+            # Skip lessons before the current week -- May be removed, we keep this for now
+            current_week_start = datetime.today().date() - timedelta(days=datetime.today().weekday())
+            lesson_date_obj = datetime.strptime(date_lesson, "%Y-%m-%d").date()
+            if lesson_date_obj < current_week_start:
+                continue
+
             # convert the date and time in the correct format
             start = f"{date_lesson}T{start_time}:00"
             end = f"{date_lesson}T{endTime}:00"
             
             event = {
-                'summary': f"{lesson['nome_insegnamento']} - {lesson['tipo']}",
+                'summary': f"{lesson['tipo'].split()[0]} - {lesson['nome_insegnamento']}",
                 'description': lesson['docente'],
                 'location': lesson['aula'],
                 "colorId": subjects[lesson['nome_insegnamento']],

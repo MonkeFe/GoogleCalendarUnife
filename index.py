@@ -1,3 +1,4 @@
+import argparse
 from dotenv import load_dotenv
 
 from modules.google_api import build_service
@@ -8,9 +9,7 @@ from modules.logger import logger
 
 load_dotenv()
 
-# If modifying these scopes, delete the file token.json.
-
-def main():
+def main(send_mail_flag):
     calendar = build_service('calendar')
     mail = build_service('gmail')
     
@@ -19,7 +18,8 @@ def main():
         calendars_info = get_calendars_info(calendar)
     except Exception as e:
         logger.error("Errore calendars_info (index.py 1): ", e)
-        
+    
+    
     for info in calendars_info:
         try:
             logger.info("Processing calendar: " + info['name'])
@@ -37,7 +37,7 @@ def main():
             logger.info("Errore calendario")
             continue
         try:
-            if modified_events:
+            if modified_events and send_mail_flag:
                 mail_body = format_body(modified_events)
                 send_email(mail, shared_users_mails, 'Modifica Lezioni', mail_body)
         except Exception as e:
@@ -45,11 +45,12 @@ def main():
             logger.info("Errore email")
             continue
 
-
-
     logger.info('Fine esecuzione')
     logger.info('-' * 70)
             
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--sendMail", action="store_true", help="Invia email se ci sono modifiche")
+    args = parser.parse_args()
+    main(args.sendMail)
