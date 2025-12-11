@@ -2,6 +2,13 @@
     {
         "name": "Informatica (Laurea)",
         "year2": "PDS0|2", 
-        "course_id": "1233"
+        "course_id": "1233",
+        "extra" : [
+            {
+                "attivita": [
+                    "EC676309"
+                ]
+            }
+        ]
     }
 ]

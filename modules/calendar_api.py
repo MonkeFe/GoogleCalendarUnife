@@ -1,4 +1,5 @@
 from datetime import date, timedelta
+import os
 from dateutil import parser
 import json
 
@@ -94,6 +95,8 @@ def check_events_diff(event1, event2):
     return modified_fields
 
 def update_calendar(calendar, unife_schedule, google_calendar_events, calendar_id):
+
+        
     modified_events = []
     i = j = 0
 
@@ -191,9 +194,9 @@ def get_calendars_info(service):
         calendars_name.append(calendar['summary'])
         
         if 'description' in calendar:
-            descrption = calendar['description'].split('+')
-            if descrption[0] == 'UNIFE-CALENDAR-APP':
-                unife_calendars.append({"name": calendar['summary'], "calendar_id": calendar['id'], "course_id": descrption[1], "year2": descrption[2]})
+            description = calendar['description'].split('+')
+            if description[0] == 'UNIFE-CALENDAR-APP':
+                unife_calendars.append({"name": calendar['summary'], "calendar_id": calendar['id'], "course_id": description[1], "year2": description[2], "extra": json.loads(description[3])})
             
     subjects = []
             
@@ -207,15 +210,16 @@ def get_calendars_info(service):
             if sub['name'] not in calendars_name:
                 calendar = {
                     'summary': sub['name'],
-                    'description': 'UNIFE-CALENDAR-APP+'+ sub['course_id'] + '+' + sub['year2'],
+                    'description': 'UNIFE-CALENDAR-APP+'+ sub['course_id'] + '+' + sub['year2'] + "+" + json.dumps(sub['extra']),
                     'timeZone': 'Europe/Rome',
+
                 }
                 created_calendar = service.calendars().insert(body=calendar).execute()
                 
                 logger.info(f"Calendario {created_calendar['summary']} creato")
                 
                 calendars.append(created_calendar['summary'])
-                unife_calendars.append({"name": created_calendar['summary'], "calendar_id": created_calendar['id'], "course_id": sub['course_id'], "year2": sub['year2']})
+                unife_calendars.append({"name": created_calendar['summary'], "calendar_id": created_calendar['id'], "course_id": sub['course_id'], "year2": sub['year2'], "extra" : sub["extra"]})
                              
     return unife_calendars
 

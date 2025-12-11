@@ -1,0 +1,347 @@
+[
+  {
+    "custom_config_limite_caratteri_titolo_celle_lezioni": 80,
+    "custom_config_numero_caratteri_titolo_celle_lezioni": 30,
+    "custom_config_visualizza_codice_generale_lezioni": 0,
+    "CodiceGenerale": "64397",
+    "informazioni_lezione": {
+      "intestazione": "Event details",
+      "contenuto": {
+        "1": [
+          {
+            "intestazione": "Course name",
+            "contenuto": "<a aria-label=\"ANALISI MATEMATICA I.B\" href=\"index.php?view=easycourse&_lang=&include=attivita&anno=2025&attivita[]=EC676309&date=28-05-2026\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: ANALISI MATEMATICA I.B\">ANALISI MATEMATICA I.B</a>&nbsp;&nbsp;",
+            "id": "nome_corso"
+          },
+          {
+            "intestazione": "",
+            "contenuto": ""
+          }
+        ],
+        "3": [
+          {
+            "intestazione": "Professors",
+            "contenuto": "<a aria-label=\"Ascanelli Alessia\" href=\"index.php?view=easycourse&_lang=&include=docente&anno=2025&docente=004372&visualizzazione_orario=cal&date=28-05-2026\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: Ascanelli Alessia\">Ascanelli Alessia</a>&nbsp;&nbsp;<br>Mail: <a href=\"mailto:scnlss@unife.it\" class=\"custom_color_link\">scnlss@unife.it</a>",
+            "id": "docenti"
+          }
+        ],
+        "7": [
+          {
+            "intestazione": "Academic trail",
+            "contenuto": "<a aria-label=\"INGEGNERIA ELETTRONICA E INFORMATICA - primo anno [3249] Laurea - 1 - Percorso Comune\" href=\"index.php?view=easycourse&_lang=&include=corso&anno=2025&corso=3249&anno2[]=PDS0|1&date=28-05-2026\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: INGEGNERIA ELETTRONICA E INFORMATICA - primo anno [3249] Laurea - 1 - Percorso Comune\">INGEGNERIA ELETTRONICA E INFORMATICA - primo anno [3249] Laurea - 1 - Percorso Comune</a>",
+            "id": "curriculum"
+          }
+        ],
+        "9": [],
+        "4": [
+          {
+            "intestazione": "Date",
+            "contenuto": "Monday 25 May 2026<br>08:30 - 11:00",
+            "id": "data_ora_info"
+          }
+        ],
+        "5": [
+          {
+            "intestazione": "Classroom",
+            "contenuto": "<span style=\"font-weight:bold\">Nome aula: </span><a aria-label=\"Aula 01\" href=\"index.php?view=rooms&include=rooms&_lang=&sede=48&aula=22&date=25-05-2026\" target=\"_blank\" title=\"Apri un'altra TAB del browser per consultare l'orario di: Aula Aula 01\">Aula 01</a><br><span style=\"font-weight:bold\">Capacità: </span>250<br><span style=\"font-weight:bold\">Sede: </span><a aria-label=\"Polo Scientifico Tecnologico (Cattedrale)\" href=\"index.php?view=rooms&include=rooms&_lang=&sede=48&date=25-05-2026\" target=\"_blank\" title=\"Apri un'altra TAB del browser per consultare l'orario di: Polo Scientifico Tecnologico (Cattedrale)\">Polo Scientifico Tecnologico (Cattedrale)</a> [Via Saragat, 1]",
+            "id": "aula",
+            "label_maps": "Google maps",
+            "label_loc_map": "View map",
+            "label_back": "Back",
+            "NoteAula": ""
+          }
+        ]
+      }
+    },
+    "mostra_aula": true,
+    "tipologia": "",
+    "display": [
+      "nome_insegnamento",
+      "link_lezione_online",
+      "docente",
+      "aula",
+      "orario",
+      "tipo"
+    ],
+    "link_lezione_online": [],
+    "codice_insegnamento": "EC676309",
+    "nome_insegnamento": "ANALISI MATEMATICA I.B",
+    "name_original": "ANALISI MATEMATICA I.B",
+    "Streaming": {
+      "0": "0"
+    },
+    "link_corso": "",
+    "link_insegnamento": "",
+    "codice_docente": "004372",
+    "docente": "Ascanelli Alessia",
+    "mail_docente": ", scnlss@unife.it",
+    "tel_docente": "0532 902186",
+    "link_docente": "<a aria-label=\"Ascanelli Alessia\" href=\"index.php?view=easycourse&_lang=&include=docente&anno=2025&docente=004372&visualizzazione_orario=cal&date=28-05-2026\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: Ascanelli Alessia\">Ascanelli Alessia</a>&nbsp;&nbsp;<br>Mail: <a href=\"mailto:scnlss@unife.it\" class=\"custom_color_link\">scnlss@unife.it</a>",
+    "percorso_didattico": "INGEGNERIA ELETTRONICA E INFORMATICA - primo anno [3249] Laurea - 1 - Percorso Comune",
+    "id": "1396739",
+    "timestamp": 1779690600,
+    "data": "25-05-2026",
+    "GiornoCompleto": "Monday 25 May 2026",
+    "codice_aula": "22",
+    "codice_sede": "48",
+    "aula": "Aula 01 [Polo Scientifico Tecnologico (Cattedrale)]",
+    "orario": "08:30 - 11:00",
+    "tipo": "Lezione",
+    "codice_tipo": "LEZ",
+    "giorno": "1",
+    "numero_giorno": "1",
+    "nome_giorno": "Monday",
+    "ora_inizio": "08:30",
+    "ora_fine": "11:00",
+    "notes": "",
+    "maps": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d577.864896819579!2d11.598202189657016!3d44.83479946000757!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x477e4dd8d390c829%3A0x8566312e6c7e9fff!2sVia+Giuseppe+Saragat%2C+4%2C+44122+Ferrara+FE!5e0!3m2!1sit!2sit!4v1491225502535\" width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0\" allowfullscreen></iframe>",
+    "loc_map": "",
+    "coordX": "",
+    "coordY": "",
+    "NoteAula": "",
+    "NoteSettimanali": "",
+    "Annullato": "0",
+    "insegnamento_tipo": [
+      "Obbligatorio"
+    ],
+    "link_aula": [
+      ""
+    ],
+    "link_prenotazione": [],
+    "highlighted": 0,
+    "from_esterno": 0,
+    "asterisk_str": "",
+    "identifier_cell": 0,
+    "vertical_idx": 0
+  },
+  {
+    "custom_config_limite_caratteri_titolo_celle_lezioni": 80,
+    "custom_config_numero_caratteri_titolo_celle_lezioni": 30,
+    "custom_config_visualizza_codice_generale_lezioni": 0,
+    "CodiceGenerale": "64397",
+    "informazioni_lezione": {
+      "intestazione": "Event details",
+      "contenuto": {
+        "1": [
+          {
+            "intestazione": "Course name",
+            "contenuto": "<a aria-label=\"ANALISI MATEMATICA I.B\" href=\"index.php?view=easycourse&_lang=&include=attivita&anno=2025&attivita[]=EC676309&date=28-05-2026\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: ANALISI MATEMATICA I.B\">ANALISI MATEMATICA I.B</a>&nbsp;&nbsp;",
+            "id": "nome_corso"
+          },
+          {
+            "intestazione": "",
+            "contenuto": ""
+          }
+        ],
+        "3": [
+          {
+            "intestazione": "Professors",
+            "contenuto": "<a aria-label=\"Ascanelli Alessia\" href=\"index.php?view=easycourse&_lang=&include=docente&anno=2025&docente=004372&visualizzazione_orario=cal&date=28-05-2026\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: Ascanelli Alessia\">Ascanelli Alessia</a>&nbsp;&nbsp;<br>Mail: <a href=\"mailto:scnlss@unife.it\" class=\"custom_color_link\">scnlss@unife.it</a>",
+            "id": "docenti"
+          }
+        ],
+        "7": [
+          {
+            "intestazione": "Academic trail",
+            "contenuto": "<a aria-label=\"INGEGNERIA ELETTRONICA E INFORMATICA - primo anno [3249] Laurea - 1 - Percorso Comune\" href=\"index.php?view=easycourse&_lang=&include=corso&anno=2025&corso=3249&anno2[]=PDS0|1&date=28-05-2026\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: INGEGNERIA ELETTRONICA E INFORMATICA - primo anno [3249] Laurea - 1 - Percorso Comune\">INGEGNERIA ELETTRONICA E INFORMATICA - primo anno [3249] Laurea - 1 - Percorso Comune</a>",
+            "id": "curriculum"
+          }
+        ],
+        "9": [],
+        "4": [
+          {
+            "intestazione": "Date",
+            "contenuto": "Tuesday 26 May 2026<br>08:30 - 11:00",
+            "id": "data_ora_info"
+          }
+        ],
+        "5": [
+          {
+            "intestazione": "Classroom",
+            "contenuto": "<span style=\"font-weight:bold\">Nome aula: </span><a aria-label=\"Aula 01\" href=\"index.php?view=rooms&include=rooms&_lang=&sede=48&aula=22&date=26-05-2026\" target=\"_blank\" title=\"Apri un'altra TAB del browser per consultare l'orario di: Aula Aula 01\">Aula 01</a><br><span style=\"font-weight:bold\">Capacità: </span>250<br><span style=\"font-weight:bold\">Sede: </span><a aria-label=\"Polo Scientifico Tecnologico (Cattedrale)\" href=\"index.php?view=rooms&include=rooms&_lang=&sede=48&date=26-05-2026\" target=\"_blank\" title=\"Apri un'altra TAB del browser per consultare l'orario di: Polo Scientifico Tecnologico (Cattedrale)\">Polo Scientifico Tecnologico (Cattedrale)</a> [Via Saragat, 1]",
+            "id": "aula",
+            "label_maps": "Google maps",
+            "label_loc_map": "View map",
+            "label_back": "Back",
+            "NoteAula": ""
+          }
+        ]
+      }
+    },
+    "mostra_aula": true,
+    "tipologia": "",
+    "display": [
+      "nome_insegnamento",
+      "link_lezione_online",
+      "docente",
+      "aula",
+      "orario",
+      "tipo"
+    ],
+    "link_lezione_online": [],
+    "codice_insegnamento": "EC676309",
+    "nome_insegnamento": "ANALISI MATEMATICA I.B",
+    "name_original": "ANALISI MATEMATICA I.B",
+    "Streaming": {
+      "0": "0"
+    },
+    "link_corso": "",
+    "link_insegnamento": "",
+    "codice_docente": "004372",
+    "docente": "Ascanelli Alessia",
+    "mail_docente": ", scnlss@unife.it",
+    "tel_docente": "0532 902186",
+    "link_docente": "<a aria-label=\"Ascanelli Alessia\" href=\"index.php?view=easycourse&_lang=&include=docente&anno=2025&docente=004372&visualizzazione_orario=cal&date=28-05-2026\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: Ascanelli Alessia\">Ascanelli Alessia</a>&nbsp;&nbsp;<br>Mail: <a href=\"mailto:scnlss@unife.it\" class=\"custom_color_link\">scnlss@unife.it</a>",
+    "percorso_didattico": "INGEGNERIA ELETTRONICA E INFORMATICA - primo anno [3249] Laurea - 1 - Percorso Comune",
+    "id": "1396752",
+    "timestamp": 1779777000,
+    "data": "26-05-2026",
+    "GiornoCompleto": "Tuesday 26 May 2026",
+    "codice_aula": "22",
+    "codice_sede": "48",
+    "aula": "Aula 01 [Polo Scientifico Tecnologico (Cattedrale)]",
+    "orario": "08:30 - 11:00",
+    "tipo": "Lezione",
+    "codice_tipo": "LEZ",
+    "giorno": "2",
+    "numero_giorno": "2",
+    "nome_giorno": "Tuesday",
+    "ora_inizio": "08:30",
+    "ora_fine": "11:00",
+    "notes": "",
+    "maps": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d577.864896819579!2d11.598202189657016!3d44.83479946000757!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x477e4dd8d390c829%3A0x8566312e6c7e9fff!2sVia+Giuseppe+Saragat%2C+4%2C+44122+Ferrara+FE!5e0!3m2!1sit!2sit!4v1491225502535\" width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0\" allowfullscreen></iframe>",
+    "loc_map": "",
+    "coordX": "",
+    "coordY": "",
+    "NoteAula": "",
+    "NoteSettimanali": "",
+    "Annullato": "0",
+    "insegnamento_tipo": [
+      "Obbligatorio"
+    ],
+    "link_aula": [
+      ""
+    ],
+    "link_prenotazione": [],
+    "highlighted": 0,
+    "from_esterno": 0,
+    "asterisk_str": "",
+    "identifier_cell": 1,
+    "vertical_idx": 0
+  },
+  {
+    "custom_config_limite_caratteri_titolo_celle_lezioni": 80,
+    "custom_config_numero_caratteri_titolo_celle_lezioni": 30,
+    "custom_config_visualizza_codice_generale_lezioni": 0,
+    "CodiceGenerale": "64397",
+    "informazioni_lezione": {
+      "intestazione": "Event details",
+      "contenuto": {
+        "1": [
+          {
+            "intestazione": "Course name",
+            "contenuto": "<a aria-label=\"ANALISI MATEMATICA I.B\" href=\"index.php?view=easycourse&_lang=&include=attivita&anno=2025&attivita[]=EC676309&date=28-05-2026\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: ANALISI MATEMATICA I.B\">ANALISI MATEMATICA I.B</a>&nbsp;&nbsp;",
+            "id": "nome_corso"
+          },
+          {
+            "intestazione": "",
+            "contenuto": ""
+          }
+        ],
+        "3": [
+          {
+            "intestazione": "Professors",
+            "contenuto": "<a aria-label=\"Ascanelli Alessia\" href=\"index.php?view=easycourse&_lang=&include=docente&anno=2025&docente=004372&visualizzazione_orario=cal&date=28-05-2026\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: Ascanelli Alessia\">Ascanelli Alessia</a>&nbsp;&nbsp;<br>Mail: <a href=\"mailto:scnlss@unife.it\" class=\"custom_color_link\">scnlss@unife.it</a>",
+            "id": "docenti"
+          }
+        ],
+        "7": [
+          {
+            "intestazione": "Academic trail",
+            "contenuto": "<a aria-label=\"INGEGNERIA ELETTRONICA E INFORMATICA - primo anno [3249] Laurea - 1 - Percorso Comune\" href=\"index.php?view=easycourse&_lang=&include=corso&anno=2025&corso=3249&anno2[]=PDS0|1&date=28-05-2026\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: INGEGNERIA ELETTRONICA E INFORMATICA - primo anno [3249] Laurea - 1 - Percorso Comune\">INGEGNERIA ELETTRONICA E INFORMATICA - primo anno [3249] Laurea - 1 - Percorso Comune</a>",
+            "id": "curriculum"
+          }
+        ],
+        "9": [],
+        "4": [
+          {
+            "intestazione": "Date",
+            "contenuto": "Wednesday 27 May 2026<br>11:00 - 13:30",
+            "id": "data_ora_info"
+          }
+        ],
+        "5": [
+          {
+            "intestazione": "Classroom",
+            "contenuto": "<span style=\"font-weight:bold\">Nome aula: </span><a aria-label=\"Aula 01\" href=\"index.php?view=rooms&include=rooms&_lang=&sede=48&aula=22&date=27-05-2026\" target=\"_blank\" title=\"Apri un'altra TAB del browser per consultare l'orario di: Aula Aula 01\">Aula 01</a><br><span style=\"font-weight:bold\">Capacità: </span>250<br><span style=\"font-weight:bold\">Sede: </span><a aria-label=\"Polo Scientifico Tecnologico (Cattedrale)\" href=\"index.php?view=rooms&include=rooms&_lang=&sede=48&date=27-05-2026\" target=\"_blank\" title=\"Apri un'altra TAB del browser per consultare l'orario di: Polo Scientifico Tecnologico (Cattedrale)\">Polo Scientifico Tecnologico (Cattedrale)</a> [Via Saragat, 1]",
+            "id": "aula",
+            "label_maps": "Google maps",
+            "label_loc_map": "View map",
+            "label_back": "Back",
+            "NoteAula": ""
+          }
+        ]
+      }
+    },
+    "mostra_aula": true,
+    "tipologia": "",
+    "display": [
+      "nome_insegnamento",
+      "link_lezione_online",
+      "docente",
+      "aula",
+      "orario",
+      "tipo"
+    ],
+    "link_lezione_online": [],
+    "codice_insegnamento": "EC676309",
+    "nome_insegnamento": "ANALISI MATEMATICA I.B",
+    "name_original": "ANALISI MATEMATICA I.B",
+    "Streaming": {
+      "0": "0"
+    },
+    "link_corso": "",
+    "link_insegnamento": "",
+    "codice_docente": "004372",
+    "docente": "Ascanelli Alessia",
+    "mail_docente": ", scnlss@unife.it",
+    "tel_docente": "0532 902186",
+    "link_docente": "<a aria-label=\"Ascanelli Alessia\" href=\"index.php?view=easycourse&_lang=&include=docente&anno=2025&docente=004372&visualizzazione_orario=cal&date=28-05-2026\" target=\"_blank\" title=\"Open another browser TAB to consult the timetable of: Ascanelli Alessia\">Ascanelli Alessia</a>&nbsp;&nbsp;<br>Mail: <a href=\"mailto:scnlss@unife.it\" class=\"custom_color_link\">scnlss@unife.it</a>",
+    "percorso_didattico": "INGEGNERIA ELETTRONICA E INFORMATICA - primo anno [3249] Laurea - 1 - Percorso Comune",
+    "id": "1396764",
+    "timestamp": 1779872400,
+    "data": "27-05-2026",
+    "GiornoCompleto": "Wednesday 27 May 2026",
+    "codice_aula": "22",
+    "codice_sede": "48",
+    "aula": "Aula 01 [Polo Scientifico Tecnologico (Cattedrale)]",
+    "orario": "11:00 - 13:30",
+    "tipo": "Lezione",
+    "codice_tipo": "LEZ",
+    "giorno": "3",
+    "numero_giorno": "3",
+    "nome_giorno": "Wednesday",
+    "ora_inizio": "11:00",
+    "ora_fine": "13:30",
+    "notes": "",
+    "maps": "<iframe src=\"https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d577.864896819579!2d11.598202189657016!3d44.83479946000757!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x477e4dd8d390c829%3A0x8566312e6c7e9fff!2sVia+Giuseppe+Saragat%2C+4%2C+44122+Ferrara+FE!5e0!3m2!1sit!2sit!4v1491225502535\" width=\"600\" height=\"450\" frameborder=\"0\" style=\"border:0\" allowfullscreen></iframe>",
+    "loc_map": "",
+    "coordX": "",
+    "coordY": "",
+    "NoteAula": "",
+    "NoteSettimanali": "",
+    "Annullato": "0",
+    "insegnamento_tipo": [
+      "Obbligatorio"
+    ],
+    "link_aula": [
+      ""
+    ],
+    "link_prenotazione": [],
+    "highlighted": 0,
+    "from_esterno": 0,
+    "asterisk_str": "",
+    "identifier_cell": 2,
+    "vertical_idx": 0
+  }
+]

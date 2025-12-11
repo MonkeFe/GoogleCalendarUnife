@@ -25,17 +25,22 @@ def main(send_mail_flag):
             logger.info("Processing calendar: " + info['name'])
             calendar_id = info['calendar_id']
             course_id = info['course_id']
+            extra = info['extra']
             
             shared_users_mails = get_shared_users_mails(calendar, calendar_id)
                 
-            unife_schedule = get_semester_from_unife(course_id, info["year2"])
+            unife_schedule = get_semester_from_unife(course_id, info["year2"], extra)
+
+            
             google_calendar_events = get_semester_from_calendar(calendar, calendar_id)
             modified_events = update_calendar(calendar, unife_schedule, google_calendar_events, calendar_id)
+            
         
         except Exception as e:
             logger.error(f"Errore index.py 2: {e}")
             logger.info("Errore calendario")
             continue
+        
         try:
             if modified_events and send_mail_flag:
                 mail_body = format_body(modified_events)
@@ -44,6 +49,7 @@ def main(send_mail_flag):
             logger.error(f"Errore index.py 3 (email): {e}")
             logger.info("Errore email")
             continue
+        
 
     logger.info('Fine esecuzione')
     logger.info('-' * 70)
