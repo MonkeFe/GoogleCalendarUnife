@@ -5,23 +5,23 @@ from dateutil import parser
 from modules.logger import logger
 
 def send_email(service, email_adresses, subject, email_message):
-    # Creazione del body
-    message = MIMEText(email_message, 'html')
-    
-    # Array di email destinatari
-    message['to'] = ', '.join(email_adresses)  # Unisce gli indirizzi email con virgola e spazio
-    
-    message['subject'] = subject
-    
-    # Codifica del body
-    raw_message = base64.urlsafe_b64encode(message.as_bytes()).decode('utf-8')
+    if not service:
+        logger.error("send_email chiamato con service Gmail None")
+        return
+    if not email_adresses:
+        logger.info("Nessun destinatario per l'email, invio saltato.")
+        return
 
-    # Invio dell'email
     try:
-        message = service.users().messages().send(userId='me', body={'raw': raw_message}).execute()
-        logger.info(f"body inviato. ID: {message['id']}")
+        message = MIMEText(email_message, 'html')
+        message['to'] = ', '.join(email_adresses)
+        message['subject'] = subject
+        
+        raw_message = base64.urlsafe_b64encode(message.as_bytes()).decode('utf-8')
+        res = service.users().messages().send(userId='me', body={'raw': raw_message}).execute()
+        logger.info(f"Email inviata con successo. ID: {res.get('id')}")
     except Exception as e:
-        logger.info(f"Errore durante l'invio dell'email (gmail.py 1): {e}")
+        logger.error(f"Errore durante l'invio dell'email (gmail_api.py): {e}")
 
 def switch_key_name(key):
     match key:
