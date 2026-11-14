@@ -14,6 +14,9 @@ subjects = {
     "TECNOLOGIE WEB": "8"
 }
 
+# Color used for subjects not listed above
+DEFAULT_COLOR_ID = "9"
+
 
 def get_week(req_date, id_course, year2):
     url = "https://aule.unife.it/AgendaStudenti/grid_call.php"
@@ -82,7 +85,7 @@ def get_week(req_date, id_course, year2):
                 'summary': f"{lesson['tipo'].split()[0]} - {lesson['nome_insegnamento']}",
                 'description': lesson['docente'],
                 'location': lesson['aula'],
-                "colorId": subjects[lesson['nome_insegnamento']],
+                "colorId": subjects.get(lesson['nome_insegnamento'], DEFAULT_COLOR_ID),
                 'start': {
                     'dateTime': start,
                     'timeZone': 'Europe/Rome',
@@ -94,7 +97,8 @@ def get_week(req_date, id_course, year2):
                 
             }
         except Exception as e:
-            logger.error("Errore nel parsing della lezione:", e)
+            logger.error(f"Errore nel parsing della lezione: {lesson} - {e}")
+            continue
 
         events_list.append(event)
     return events_list

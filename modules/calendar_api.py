@@ -1,52 +1,46 @@
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
+from zoneinfo import ZoneInfo
 from dateutil import parser
 import json
 
 from googleapiclient.http import BatchHttpRequest
 from modules.logger import logger
 
-# Funzione di callback per gestire le risposte delle richieste batch
-def callback(request_id, response, exception):
-    if exception is not None:
-        logger.error(f"Errore nella richiesta (calendar_api.py 1) {request_id}: {exception}")
+LOCAL_TZ = ZoneInfo('Europe/Rome')
+BATCH_URI = 'https://www.googleapis.com/batch/calendar/v3'
+BATCH_SIZE = 20
 
-# Helper function to parse dates consistently
 def parse_datetime(datetime_str):
     """
-    Parse a datetime string and return a datetime object, handling timezone information
-    by consistently removing timezone info for reliable comparisons
+    Parse a datetime string and return a naive datetime expressed in Europe/Rome time.
+    Aware datetimes (e.g. '...+01:00' or '...Z' returned by Google) are converted to
+    local time before dropping the tzinfo, so they compare correctly with the naive
+    local datetimes built from the unife schedule.
     """
+    if not datetime_str:
+        return None
     try:
         dt = parser.parse(datetime_str)
-        # Always return naive datetime (without timezone info) for consistent comparisons
-        return dt.replace(tzinfo=None) if dt else None
+        if dt.tzinfo is not None:
+            dt = dt.astimezone(LOCAL_TZ)
+        return dt.replace(tzinfo=None)
     except Exception as e:
         logger.error(f"Error parsing datetime (calendar_api.py 2): {datetime_str}, error: {e}")
         return None
 
 def event_key(event):
-    """Create a stable key for an event to help deduplicate items.
-    Uses summary, start, end, and location when available."""
-    try:
-        summary = event.get('summary', '').strip()
-        location = event.get('location', '').strip()
-        start_dt = event.get('start', {}).get('dateTime')
-        end_dt = event.get('end', {}).get('dateTime')
-        return (
-            summary,
-            parse_datetime(start_dt) if start_dt else None,
-            parse_datetime(end_dt) if end_dt else None,
-            location,
-        )
-    except Exception:
-        return (None, None, None, None)
+    """Stable identity of a lesson: start datetime + summary.
+    Two events with the same key are the same lesson (duplicates)."""
+    start = parse_datetime(event.get('start', {}).get('dateTime'))
+    summary = (event.get('summary') or '').strip()
+    return (start, summary)
 
 def sort_events(events):
     """Return a new list of events sorted by start then end time."""
     def sort_key(ev):
-        s = parse_datetime(ev.get('start', {}).get('dateTime')) if ev.get('start') else None
-        e = parse_datetime(ev.get('end', {}).get('dateTime')) if ev.get('end') else None
-        return (s or date.min, e or date.min)
+        s = parse_datetime(ev.get('start', {}).get('dateTime'))
+        e = parse_datetime(ev.get('end', {}).get('dateTime'))
+        return (s or datetime.min, e or datetime.min)
     return sorted(events, key=sort_key)
 
 def dedupe_events(events):
@@ -60,18 +54,6 @@ def dedupe_events(events):
         seen.add(k)
         result.append(ev)
     return result
-        
-def insert_element(service, batch, new_event, calendar_id):
-    batch.add(service.events().insert(calendarId=calendar_id, body=new_event))
-    logger.info(f'Event created: {new_event["summary"]}')
-
-def delete_element(service, batch, event_id, calendar_id):
-    batch.add(service.events().delete(calendarId=calendar_id, eventId=event_id))
-    logger.info("Event deleted")
-
-def update_element(service, batch, event_id, body, calendar_id):
-    batch.add(service.events().update(calendarId= calendar_id, eventId = event_id, body=body))
-    logger.info("Event update")
 
 def check_events_diff(event1, event2):
     modified_fields = []
@@ -80,79 +62,103 @@ def check_events_diff(event1, event2):
         if key in event2:
             if key != 'start' and key != 'end':
                 if event1[key] != event2[key]:
-                    logger.info(f'\n{event2["htmlLink"]}: Difference Found in {key}: {event2[key]} --> {event1[key]}')
+                    logger.info(f'\n{event2.get("htmlLink")}: Difference Found in {key}: {event2[key]} --> {event1[key]}')
                     modified_fields.append({key: [event2[key],event1[key]]})
-            elif key == 'end' or key == 'start':
-                # Use the new parser for both datetime strings
-                dt1 = parse_datetime(event1[key]['dateTime'])
-                dt2 = parse_datetime(event2[key]['dateTime'])
-                
+            else:
+                dt1 = parse_datetime(event1[key].get('dateTime'))
+                dt2 = parse_datetime(event2[key].get('dateTime'))
+
                 if dt1 != dt2:
-                    logger.info(f'\n{event2["htmlLink"]}: Difference Found in {key}: {event2[key]} --> {event1[key]}')
+                    logger.info(f'\n{event2.get("htmlLink")}: Difference Found in {key}: {event2[key]} --> {event1[key]}')
                     modified_fields.append({key: [event2[key],event1[key]]})
-    
+
     return modified_fields
 
-def update_calendar(calendar, unife_schedule, google_calendar_events, calendar_id):
-    modified_events = []
-    i = j = 0
+class _BatchRunner:
+    """Collects requests and executes them in chunks, tracking failures."""
+    def __init__(self):
+        self.failures = 0
+        self._new_batch()
 
-    # Ensure deterministic processing to avoid duplicates
-    orig_unife_len = len(unife_schedule)
-    orig_google_len = len(google_calendar_events)
+    def _new_batch(self):
+        self.batch = BatchHttpRequest(callback=self._callback, batch_uri=BATCH_URI)
+        self.count = 0
+
+    def _callback(self, request_id, response, exception):
+        if exception is not None:
+            self.failures += 1
+            logger.error(f"Errore nella richiesta (calendar_api.py 1) {request_id}: {exception}")
+
+    def add(self, request):
+        self.batch.add(request)
+        self.count += 1
+        if self.count >= BATCH_SIZE:
+            self.flush()
+
+    def flush(self):
+        if self.count:
+            self.batch.execute()
+            logger.info(f"Batch executed ({self.count} requests)")
+        self._new_batch()
+
+def update_calendar(calendar, unife_schedule, google_calendar_events, calendar_id):
+    """
+    Sync google calendar with the unife schedule, matching events by (start, summary).
+    - lessons on unife but not on google  -> created
+    - lessons on both                      -> updated if something changed
+    - events on google but not on unife    -> deleted
+    - duplicated events on google          -> extra copies deleted
+    """
+    modified_events = []
+
     unife_schedule = dedupe_events(sort_events(unife_schedule))
     google_calendar_events = sort_events(google_calendar_events)
-    logger.info(f"Sync prep: unife {orig_unife_len}->{len(unife_schedule)}, google {orig_google_len} sorted")
 
-    batch = BatchHttpRequest(callback=callback, batch_uri='https://www.googleapis.com/batch/calendar/v3')
+    # Group google events by key, so duplicates are detected
+    google_by_key = {}
+    for ev in google_calendar_events:
+        google_by_key.setdefault(event_key(ev), []).append(ev)
 
-    while (i < len(unife_schedule) or j < len(google_calendar_events)):
-        if (len(batch._requests) > 20):
-            batch.execute()
-            logger.info("Batch executed (chunk)")
-            batch = BatchHttpRequest(callback=callback, batch_uri='https://www.googleapis.com/batch/calendar/v3')
-        
-        if (i < len(unife_schedule) and j < len(google_calendar_events)):
-            # Use the new parser for both datetime strings
-            date_event_unife = parse_datetime(unife_schedule[i]['start']['dateTime'])
-            date_event_google_calendar = parse_datetime(google_calendar_events[j]['start']['dateTime'])
-            
-            # Compare times ignoring timezone differences
-            same_time = False
-            if date_event_unife and date_event_google_calendar:
-                unife_naive = date_event_unife.replace(tzinfo=None)
-                google_naive = date_event_google_calendar.replace(tzinfo=None)
-                same_time = unife_naive == google_naive
-            
-            if same_time:
-                # Only update if there are differences
-                differences = check_events_diff(unife_schedule[i], google_calendar_events[j])
-                if differences:
-                    batch.add(calendar.events().update(calendarId= calendar_id, eventId = google_calendar_events[j]["id"], body=unife_schedule[i]))
-                    modified_events.append({'Event' : google_calendar_events[j], 'Action' : 'Updated', 'ModifiedFields': differences})
-                i += 1
-                j += 1
-            elif (not date_event_unife or not date_event_google_calendar or 
-                  date_event_unife.replace(tzinfo=None) > date_event_google_calendar.replace(tzinfo=None)):
-                delete_element(calendar, batch, google_calendar_events[j]["id"], calendar_id)
-                modified_events.append({'Event' : google_calendar_events[j], 'Action' : 'Deleted', 'ModifiedFields': []})
-                j += 1
-            else:
-                insert_element(calendar, batch, unife_schedule[i], calendar_id)
-                modified_events.append({'Event' : unife_schedule[i], 'Action' : 'Created', 'ModifiedFields': []})
+    runner = _BatchRunner()
+    created = updated = deleted = duplicates = 0
 
-                i += 1
-        elif (i < len(unife_schedule)):
-            insert_element(calendar, batch, unife_schedule[i], calendar_id)
-            modified_events.append({'Event' : unife_schedule[i], 'Action' : 'Created', 'ModifiedFields': []})
-            i += 1
-        elif (j < len(google_calendar_events)):
-            delete_element(calendar, batch, google_calendar_events[j]["id"], calendar_id)
-            modified_events.append({'Event' : google_calendar_events[j], 'Action' : 'Deleted', 'ModifiedFields': []})
-            j += 1
-            
-    batch.execute()
-    logger.info("Batch executed (final)")
+    for unife_event in unife_schedule:
+        key = event_key(unife_event)
+        matches = google_by_key.pop(key, [])
+
+        if not matches:
+            runner.add(calendar.events().insert(calendarId=calendar_id, body=unife_event))
+            logger.info(f'Event created: {unife_event["summary"]} {unife_event["start"]["dateTime"]}')
+            modified_events.append({'Event': unife_event, 'Action': 'Created', 'ModifiedFields': []})
+            created += 1
+            continue
+
+        keep, extra = matches[0], matches[1:]
+
+        differences = check_events_diff(unife_event, keep)
+        if differences:
+            runner.add(calendar.events().update(calendarId=calendar_id, eventId=keep["id"], body=unife_event))
+            logger.info(f'Event updated: {unife_event["summary"]} {unife_event["start"]["dateTime"]}')
+            modified_events.append({'Event': keep, 'Action': 'Updated', 'ModifiedFields': differences})
+            updated += 1
+
+        # Duplicates are removed silently (not a real change of the schedule)
+        for dup in extra:
+            runner.add(calendar.events().delete(calendarId=calendar_id, eventId=dup["id"]))
+            logger.info(f'Duplicate deleted: {dup.get("summary")} {dup["start"].get("dateTime")}')
+            duplicates += 1
+
+    # Whatever is left on google is no longer on unife
+    for events in google_by_key.values():
+        for i, ev in enumerate(events):
+            runner.add(calendar.events().delete(calendarId=calendar_id, eventId=ev["id"]))
+            logger.info(f'Event deleted: {ev.get("summary")} {ev.get("start", {}).get("dateTime")}')
+            if i == 0:
+                modified_events.append({'Event': ev, 'Action': 'Deleted', 'ModifiedFields': []})
+            deleted += 1
+
+    runner.flush()
+    logger.info(f"Sync done: created {created}, updated {updated}, deleted {deleted}, duplicates removed {duplicates}, failed requests {runner.failures}")
 
     return modified_events
 

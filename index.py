@@ -1,4 +1,7 @@
 import argparse
+import fcntl
+import os
+import sys
 from dotenv import load_dotenv
 
 from modules.google_api import build_service
@@ -53,4 +56,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--sendMail", action="store_true", help="Invia email se ci sono modifiche")
     args = parser.parse_args()
-    main(args.sendMail)
+
+    # Impedisce esecuzioni concorrenti (es. cron sovrapposti) che creerebbero eventi duplicati
+    lock_path = os.path.join(os.getenv("ABSOLUTEPATH") or os.path.dirname(os.path.abspath(__file__)), '.sync.lock')
+    with open(lock_path, 'w') as lock_file:
+        try:
+            fcntl.flock(lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except BlockingIOError:
+            logger.info('Esecuzione già in corso, esco')
+            sys.exit(0)
+        main(args.sendMail)

@@ -5,3 +5,5 @@ logs/
 .env
 clearAllEvents.py
 execute
+.sync.lock
+
