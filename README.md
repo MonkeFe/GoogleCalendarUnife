@@ -66,11 +66,74 @@ pip install -r requirements.txt
 ### Setup calendari
 Il programma sincronizzerà i calendari dei corsi impostati nel file `calendar.json`, per il momento i dati sono impostati a mano in attesa di poter accedere a delle api ufficiali.
 
-### Esecuzione
-Usare la flag `--sendMail` se si vuole inviare un'email con gli aggiornamenti agli eventi
+---
 
-#### Custom
-Per eseguire lo script è necessario abilitare l'ambiente virtuale:
+## 📅 Guida: Cambiare i parametri per il nuovo Anno Accademico
+
+Quando inizia un nuovo anno accademico, occorre aggiornare i parametri di configurazione del progetto per consentire al sistema di scaricare correttamente gli orari delle lezioni aggiornati dal portale Unife.
+
+Di seguito sono riportati i passi da seguire file per file:
+
+### 1. Configurazione delle variabili di ambiente (`.env`)
+Nel file `.env` (creato a partire da `.env.example`), aggiornare i due anni relativi ai semestri dell'anno accademico:
+
+```env
+ANNOSEMESTRE1=2025
+ANNOSEMESTRE2=2026
+```
+- **`ANNOSEMESTRE1`**: L'anno solare in cui si svolge il **1° Semestre** (es. `2025` per l'anno accademico 2025/2026, indicativamente da settembre a dicembre).
+- **`ANNOSEMESTRE2`**: L'anno solare in cui si svolge il **2° Semestre** (es. `2026` per l'anno accademico 2025/2026, indicativamente da febbraio a maggio).
+
+---
+
+### 2. Configurazione del file `calendar.json`
+Nel file `calendar.json` sono definite le informazioni sul corso di laurea e sull'anno di corso da sincronizzare. È possibile specificare direttamente l'URL di AgendaStudenti oppure indicare i singoli parametri:
+
+```json
+[
+    {
+        "name": "Informatica (Laurea)",
+        "url": "https://aule.unife.it/AgendaStudenti/index.php?view=easycourse&form-type=corso&include=corso&txtcurr=3+-+Percorso+Comune&anno=2026&corso=1233&anno2%5B%5D=PDS0%7C3&date=08-09-2026&periodo_didattico=&_lang=en&list=&week_grid_type=-1&ar_codes_=&ar_select_=&col_cells=0&empty_box=0&only_grid=0&highlighted_date=0&all_events=0&faculty_group=0#",
+        "year2": "PDS0|3",
+        "course_id": "1233",
+        "extra" : []
+    }
+]
+```
+- **`url`** *(opzionale)*: URL completo da cui estrarre in automatico `course_id`, `year2`, `anno` e `txtcurr`.
+- **`year2`**: Rappresenta l'anno di corso e il relativo Percorso di Studi su EasyCourse/AgendaStudenti Unife (es. `"PDS0|3"` per il 3° anno).
+- **`course_id`**: L'ID del corso di laurea sul portale Unife (es. `"1233"` per Informatica).
+- **`extra`**: Eventuali codici di insegnamenti o attività didattiche singole/opzionali.
+
+---
+
+### 3. Gestione automatica dell'anno accademico (`modules/get_unife_schedules.py`)
+Il parametro `anno` nelle chiamate API Unife viene ora ricavato automaticamente da `ANNOSEMESTRE1` in `.env` (o calcolato in automatico in base alla data della lezione). Non è più necessario modificare manualmente il codice sorgente Python ad ogni cambio di anno accademico!
+
+#### *(Opzionale)* Mappatura dei colori delle materie
+In [`modules/get_unife_schedules.py`](file:///home/nicola/Downloads/GoogleCalendarUnife/modules/get_unife_schedules.py), il dizionario `subjects` mappa i nomi degli insegnamenti ai rispettivi ID colore di Google Calendar.
+
+---
+
+### 4. Sincronizzazione automatica con Google Calendar
+Quando modifichi `calendar.json` (es. passando da `PDS0|2` a `PDS0|3`), lo script rileva la modifica e aggiorna automaticamente la descrizione del calendario corrispondente su Google Calendar, senza richiedere modifiche manuali o la cancellazione del calendario.
+
+### Esecuzione
+- **Sincronizzazione normale**:
+  ```bash
+  python3 index.py
+  ```
+- **Con notifica email**:
+  ```bash
+  python3 index.py --sendMail
+  ```
+- **Download/Verifica diretta da URL**:
+  ```bash
+  python3 index.py --url "https://aule.unife.it/AgendaStudenti/..."
+  ```
+
+#### Ambiente virtuale
+Per eseguire lo script assicurarsi di abilitare l'ambiente virtuale:
 ```bash
 source <venv_path>/bin/activate
 ```

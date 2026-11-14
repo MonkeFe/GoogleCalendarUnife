@@ -13,56 +13,81 @@ from modules.logger import logger
 load_dotenv()
 
 def main(send_mail_flag):
-    calendar = build_service('calendar')
-    mail = build_service('gmail')
-    
     logger.info('Inizio esecuzione')
+    calendars_info = []
+
     try:
+        calendar = build_service('calendar')
+        mail = build_service('gmail')
+        
+        if not calendar:
+            logger.error("Impossibile procedere: servizio Google Calendar non disponibile.")
+            return
+
         calendars_info = get_calendars_info(calendar)
     except Exception as e:
-        logger.error("Errore calendars_info (index.py 1): ", e)
-    
-    
+        logger.error(f"Errore nella fase di inizializzazione in index.py: {e}")
+
     for info in calendars_info:
+        modified_events = []
+        shared_users_mails = []
         try:
-            logger.info("Processing calendar: " + info['name'])
+            cal_name = info.get('name', 'Sconosciuto')
+            logger.info("Processing calendar: " + cal_name)
             calendar_id = info['calendar_id']
             course_id = info['course_id']
+            extra = info['extra']
+            year2 = info['year2']
+            exclude = info.get('exclude', None)
             
             shared_users_mails = get_shared_users_mails(calendar, calendar_id)
-                
-            unife_schedule = get_semester_from_unife(course_id, info["year2"])
+            unife_schedule = get_semester_from_unife(course_id, year2, extra, exclude=exclude)
             google_calendar_events = get_semester_from_calendar(calendar, calendar_id)
+            if google_calendar_events is None:
+                logger.error(f"Impossibile leggere gli eventi del calendario '{cal_name}', sincronizzazione saltata per evitare duplicati.")
+                continue
             modified_events = update_calendar(calendar, unife_schedule, google_calendar_events, calendar_id)
-        
+            
         except Exception as e:
-            logger.error(f"Errore index.py 2: {e}")
-            logger.info("Errore calendario")
+            logger.error(f"Errore nella elaborazione del calendario '{info.get('name')}': {e}")
             continue
+        
         try:
             if modified_events and send_mail_flag:
                 mail_body = format_body(modified_events)
-                send_email(mail, shared_users_mails, 'Modifica Lezioni', mail_body)
+                if mail_body and shared_users_mails and mail:
+                    send_email(mail, shared_users_mails, 'Modifica Lezioni', mail_body)
+                elif not shared_users_mails:
+                    logger.info(f"Nessuna email condivisa per il calendario '{info.get('name')}', skip invio mail.")
         except Exception as e:
-            logger.error(f"Errore index.py 3 (email): {e}")
-            logger.info("Errore email")
+            logger.error(f"Errore durante l'invio email per '{info.get('name')}': {e}")
             continue
 
     logger.info('Fine esecuzione')
     logger.info('-' * 70)
-            
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--sendMail", action="store_true", help="Invia email se ci sono modifiche")
-    args = parser.parse_args()
+    try:
+        import json
+        parser = argparse.ArgumentParser(description="Sincronizza lezioni Unife con Google Calendar o scarica da URL")
+        parser.add_argument("--sendMail", action="store_true", help="Invia email se ci sono modifiche")
+        parser.add_argument("--url", type=str, help="Scarica le lezioni direttamente dall'URL specificato di AgendaStudenti Unife")
+        parser.add_argument("--exportJson", type=str, help="Salva le lezioni scaricate (da --url) nel file JSON specificato")
+        args = parser.parse_args()
 
-    # Impedisce esecuzioni concorrenti (es. cron sovrapposti) che creerebbero eventi duplicati
-    lock_path = os.path.join(os.getenv("ABSOLUTEPATH") or os.path.dirname(os.path.abspath(__file__)), '.sync.lock')
-    with open(lock_path, 'w') as lock_file:
-        try:
-            fcntl.flock(lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
-        except BlockingIOError:
-            logger.info('Esecuzione già in corso, esco')
-            sys.exit(0)
-        main(args.sendMail)
+        if args.url:
+            from modules.get_unife_schedules import get_lessons_from_url
+            logger.info(f"Download lezioni dall'URL: {args.url}")
+            lessons = get_lessons_from_url(args.url)
+            print(f"Scaricamento completato: {len(lessons)} lezioni recuperate per il semestre.")
+            if lessons:
+                print(f"Prima lezione: {lessons[0]['summary']} ({lessons[0]['start']['dateTime']} -> {lessons[0]['end']['dateTime']})")
+                print(f"Ultima lezione: {lessons[-1]['summary']} ({lessons[-1]['start']['dateTime']} -> {lessons[-1]['end']['dateTime']})")
+            if args.exportJson:
+                with open(args.exportJson, "w", encoding="utf-8") as f:
+                    json.dump(lessons, f, ensure_ascii=False, indent=2)
+                print(f"Lezioni salvate in: {args.exportJson}")
+        else:
+            main(args.sendMail)
+    except Exception as e:
+        logger.error(f"Errore non gestito durante l'esecuzione di index.py: {e}")
