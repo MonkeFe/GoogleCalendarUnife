@@ -40,6 +40,9 @@ def main(send_mail_flag):
             shared_users_mails = get_shared_users_mails(calendar, calendar_id)
             unife_schedule = get_semester_from_unife(course_id, year2, extra, exclude=exclude)
             google_calendar_events = get_semester_from_calendar(calendar, calendar_id)
+            if google_calendar_events is None:
+                logger.error(f"Impossibile leggere gli eventi del calendario '{cal_name}', sincronizzazione saltata per evitare duplicati.")
+                continue
             modified_events = update_calendar(calendar, unife_schedule, google_calendar_events, calendar_id)
             
         except Exception as e:
