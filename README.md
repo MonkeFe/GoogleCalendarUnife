@@ -50,15 +50,11 @@ Vai a credenziali
 
 
 ## Setup Progetto
-Si consiglia la creazione di un [ambiente virtuale Python](https://docs.python.org/3/library/venv.html) per la gestione delle *dependencies*:
-```bash
-python3 -m venv <venv_path>
-```
-Normalmente IDE come Visual Studio Code usano il percorso `.venv` per l'ambiente virtuale.
+Il progetto usa [uv](https://docs.astral.sh/uv/) per la gestione dell'ambiente virtuale e delle *dependencies*.
 ### Installazione
-Installare i pacchetti del progetto con:
+Creare l'ambiente virtuale in `.venv` e installare i pacchetti del progetto con:
 ```bash
-pip install -r requirements.txt
+uv sync
 ```
 
 > Creare un file `.env` con dentro l'id del calendario, l'anno scolastico del primo semestre e l'anno scolastico del secondo semtre, un esempio si può trovare nel file `.env.example`

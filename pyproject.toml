@@ -1,7 +1,7 @@
 [project]
 name = "googlecalendarunife"
 version = "0.1.0"
-description = "Add your description here"
+description = "Scarica le lezioni di informatica dal sito di UNIFE e le sincronizza su Google Calendar"
 readme = "README.md"
 authors = [
     { name = "Nicola Tieghi", email = "nicola.tieghi@gmail.com" }
@@ -16,9 +16,6 @@ dependencies = [
     "python-dotenv>=1.2.4",
     "requests>=2.34.2",
 ]
-
-[project.scripts]
-googlecalendarunife = "googlecalendarunife:main"
 
 [build-system]
 requires = ["uv_build>=0.13.5,<0.14.0"]
