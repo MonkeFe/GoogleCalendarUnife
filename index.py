@@ -88,6 +88,14 @@ if __name__ == "__main__":
                     json.dump(lessons, f, ensure_ascii=False, indent=2)
                 print(f"Lezioni salvate in: {args.exportJson}")
         else:
-            main(args.sendMail)
+            # Impedisce esecuzioni concorrenti (es. cron sovrapposti) che lavorerebbero sugli stessi eventi
+            base_dir = os.getenv("ABSOLUTEPATH") or os.path.dirname(os.path.abspath(__file__))
+            with open(os.path.join(base_dir, '.sync.lock'), 'w') as lock_file:
+                try:
+                    fcntl.flock(lock_file, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                except BlockingIOError:
+                    logger.info('Esecuzione già in corso, esco')
+                    sys.exit(0)
+                main(args.sendMail)
     except Exception as e:
         logger.error(f"Errore non gestito durante l'esecuzione di index.py: {e}")
