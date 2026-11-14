@@ -251,6 +251,13 @@ def get_calendars_info(service):
             try:
                 description = calendar['description'].split('+')
                 if description[0] == 'UNIFE-CALENDAR-APP':
+                    if any(c['name'] == summary for c in unife_calendars):
+                        logger.warning(
+                            f"Trovati più calendari UNIFE con il nome '{summary}': "
+                            f"il calendario {calendar['id']} viene ignorato. "
+                            f"Eliminare il duplicato da Google Calendar per evitare lezioni doppie."
+                        )
+                        continue
                     unife_calendars.append({
                         "name": summary, 
                         "calendar_id": calendar['id'], 
